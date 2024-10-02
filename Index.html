@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+        }
+        #foodList {
+            list-style-type: none;
+            padding: 0;
+        }
+        input {
+            padding: 10px;
+            margin: 5px;
+            width: calc(30% - 22px);
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calorie Tracker</h1>
+    <input type="text" id="foodItem" placeholder="Enter Food Item" />
+    <input type="number" id="calorieCount" placeholder="Enter Calorie Count" />
+    <button onclick="addFood()">Add Food</button>
+    <h2>Food List:</h2>
+    <ul id="foodList"></ul>
+
+    <script>
+        function addFood() {
+            var foodItem = document.getElementById("foodItem").value;
+            var calorieCount = document.getElementById("calorieCount").value;
+            if (foodItem && calorieCount) {
+                var list = document.getElementById("foodList");
+                var entry = document.createElement("li");
+                entry.textContent = foodItem + " - " + calorieCount + " calories";
+                list.appendChild(entry);
+                document.getElementById("foodItem").value = "";
+                document.getElementById("calorieCount").value = "";
+            } else {
+                alert("Please enter both food item and calorie count.");
+            }
+        }
+    </script>
+</body>
+</html>
