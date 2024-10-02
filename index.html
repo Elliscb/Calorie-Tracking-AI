@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calorie Tracker</title>
+    <title>Calorie Tracking AI</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -76,11 +76,16 @@
         .clear-button:hover {
             background-color: #c82333;
         }
+        .total-calories {
+            font-weight: bold;
+            color: #d9534f;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Calorie Tracker</h1>
+        <h1>Calorie Tracking AI</h1>
     </header>
     <div id="container">
         <input type="text" id="foodItem" placeholder="Enter Food Item" />
@@ -91,24 +96,32 @@
         <h2>Food List:</h2>
         <ul id="foodList"></ul>
         
+        <div class="total-calories" id="totalCalories">Total Calories: 0</div>
+        
         <div class="link">
             <h2><a href="calorieEstimator.html">Estimate Calories from Image</a></h2>
         </div>
     </div>
     
     <footer class="footer">
-        <p>© 2024 Calorie Tracker. All rights reserved.</p>
+        <p>© 2024 Calorie Tracking AI. All rights reserved.</p>
     </footer>
 
     <script>
+        // Load food items and total calories from local storage
+        window.onload = function() {
+            const foodItems = JSON.parse(localStorage.getItem("foodItems")) || [];
+            const totalCalories = localStorage.getItem("totalCalories") || 0;
+            foodItems.forEach(item => addToFoodList(item.food, item.calories));
+            document.getElementById("totalCalories").innerText = `Total Calories: ${totalCalories}`;
+        };
+
         function addFood() {
             var foodItem = document.getElementById("foodItem").value;
             var calorieCount = document.getElementById("calorieCount").value;
             if (foodItem && calorieCount) {
-                var list = document.getElementById("foodList");
-                var entry = document.createElement("li");
-                entry.textContent = foodItem + " - " + calorieCount + " calories";
-                list.appendChild(entry);
+                addToFoodList(foodItem, calorieCount);
+                saveToLocalStorage(foodItem, calorieCount);
                 document.getElementById("foodItem").value = "";
                 document.getElementById("calorieCount").value = "";
             } else {
@@ -116,8 +129,36 @@
             }
         }
 
+        function addToFoodList(foodItem, calorieCount) {
+            var list = document.getElementById("foodList");
+            var entry = document.createElement("li");
+            entry.textContent = foodItem + " - " + calorieCount + " calories";
+            list.appendChild(entry);
+
+            // Update total calories displayed
+            updateTotalCalories(parseInt(calorieCount));
+        }
+
+        function saveToLocalStorage(foodItem, calorieCount) {
+            const foodItems = JSON.parse(localStorage.getItem("foodItems")) || [];
+            foodItems.push({ food: foodItem, calories: parseInt(calorieCount) });
+            localStorage.setItem("foodItems", JSON.stringify(foodItems));
+            const totalCalories = parseInt(localStorage.getItem("totalCalories") || 0) + parseInt(calorieCount);
+            localStorage.setItem("totalCalories", totalCalories);
+        }
+
+        function updateTotalCalories(calories) {
+            const currentTotal = parseInt(localStorage.getItem("totalCalories") || 0);
+            const newTotal = currentTotal + calories;
+            localStorage.setItem("totalCalories", newTotal);
+            document.getElementById("totalCalories").innerText = `Total Calories: ${newTotal}`;
+        }
+
         function clearList() {
             document.getElementById("foodList").innerHTML = "";
+            localStorage.removeItem("foodItems");
+            localStorage.removeItem("totalCalories");
+            document.getElementById("totalCalories").innerText = "Total Calories: 0";
         }
     </script>
 </body>
