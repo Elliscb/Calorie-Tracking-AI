@@ -1,268 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calorie Tracking AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Calorie Tracker - Calorie-Tracking-AI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: #fff;
-            overflow-x: hidden;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
         header {
+            background: #4CAF50;
+            color: white;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
         }
 
         h1 {
             margin: 0;
-            font-size: 2.5em;
-            animation: fadeIn 1s ease-in;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        #container {
-            max-width: 1000px;
-            margin: auto;
-            padding: 20px;
-            background: #fff;
+        .container {
+            max-width: 600px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            color: #333;
-            animation: slideIn 1s ease-in;
+            padding: 20px;
+            margin-top: 20px;
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        input[type="text"], input[type="number"] {
+            width: calc(50% - 20px);
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
 
-        .button {
-            padding: 10px 15px;
+        button {
+            padding: 10px;
             margin: 5px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-            font-size: 16px;
         }
 
-        .button:hover {
-            background-color: #388E3C;
-            transform: scale(1.05);
+        button:hover {
+            background-color: #45a049;
         }
 
-        input[type="text"],
-        input[type="number"],
-        input[type="email"],
-        input[type="password"] {
-            padding: 10px;
-            margin: 5px;
-            width: calc(100% - 22px);
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        h2 {
-            color: #4CAF50;
-            margin-top: 20px;
-            animation: fadeIn 1s ease-in;
-        }
-
-        #foodList {
+        ul {
             list-style-type: none;
             padding: 0;
         }
 
-        .total-calories {
-            font-weight: bold;
-            color: #d9534f;
+        li {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .progress {
+            background-color: #f3f3f3;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: #4CAF50;
+            width: 0;
+        }
+
+        .footer {
             margin-top: 20px;
-        }
-
-        .auth-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px 0;
-            background: #333;
-            color: white;
-            margin-top: 20px;
-        }
-
-        /* Advertisement Section */
-        .ad {
-            margin: 20px 0;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 600px) {
-            #container {
-                padding: 10px;
-            }
-
-            h1 {
-                font-size: 2em;
-            }
-
-            .button {
-                width: 100%;
-            }
+            font-size: 0.8em;
+            color: #666;
         }
     </style>
 </head>
-
 <body>
-    <header>
-        <h1>Calorie Tracking AI</h1>
-    </header>
-    <div id="container">
-        <div class="auth-container">
-            <h2>User Authentication</h2>
-            <input type="email" id="email" placeholder="Email" required />
-            <input type="password" id="password" placeholder="Password" required />
-            <button class="button" onclick="register()">Register</button>
-            <button class="button" onclick="login()">Login</button>
-            <button class="button hidden" id="logoutButton" onclick="logout()">Logout</button>
-            <div id="authMessage"></div>
-        </div>
 
-        <h2>Search Food Calories</h2>
-        <input type="text" id="foodSearch" placeholder="Search for Food" />
-        <button class="button" onclick="searchFood()">Search</button>
+<header>
+    <h1>Calorie Tracker - Calorie-Tracking-AI</h1>
+</header>
 
-        <h2>Track Food Calories</h2>
-        <input type="text" id="foodItem" placeholder="Enter Food Item" />
-        <button class="button" onclick="addFood()">Add Food</button>
+<div class="container">
+    <h2>Log Your Food</h2>
+    <input type="text" id="foodItem" placeholder="Enter Food Item" />
+    <button onclick="estimateCalories()">Estimate Calories</button>
+    <h2>Estimated Calories: <span id="estimatedCalories">0</span></h2>
 
-        <h2>Food List:</h2>
-        <ul id="foodList"></ul>
-        <div class="total-calories" id="totalCalories">Total Calories: 0</div>
+    <h2>Your Food Log</h2>
+    <ul id="foodList"></ul>
 
-        <h2>BMI and Body Fat Calculators</h2>
-        <input type="number" id="weight" placeholder="Weight (kg)" />
-        <input type="number" id="height" placeholder="Height (cm)" />
-        <button class="button" onclick="calculateBMI()">Calculate BMI</button>
-        <div id="bmiResult"></div>
-
-        <!-- Advertisement Section -->
-        <div class="ad">
-            <h3>Ad Placeholder</h3>
-            <p>Advertise your product here!</p>
-        </div>
+    <h3>Total Calories: <span id="totalCalories">0</span></h3>
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
     </div>
+</div>
 
-    <footer>
-        <p>© 2024 Calorie Tracking AI. All rights reserved.</p>
-    </footer>
+<div class="footer">
+    <p>Developed with ❤️ by Calorie-Tracking-AI</p>
+</div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
-    <script>
-        // Firebase configuration (insert your own config here)
-        const firebaseConfig = {
-            apiKey: "26a3d04f97dd41f68bab3d124a3dc4b9",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+<script>
+    let totalCalories = 0;
+
+    function estimateCalories() {
+        const foodItem = document.getElementById("foodItem").value;
+        
+        // Simple calorie estimation based on predefined food items
+        const calorieDatabase = {
+            "apple": 95,
+            "banana": 105,
+            "orange": 62,
+            "chicken breast": 165,
+            "broccoli": 55,
+            "rice": 206
         };
+        
+        const estimatedCalories = calorieDatabase[foodItem.toLowerCase()] || 0;
+        document.getElementById("estimatedCalories").textContent = estimatedCalories;
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        let totalCalories = 0;
-
-        // User Registration
-        function register() {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            auth.createUserWithEmailAndPassword(email, password)
-                .then(() => {
-                    document.getElementById("authMessage").innerText = "Registration successful!";
-                })
-                .catch(error => {
-                    document.getElementById("authMessage").innerText = error.message;
-                });
+        if (estimatedCalories > 0) {
+            addFoodToLog(foodItem, estimatedCalories);
+        } else {
+            alert("Food item not found in the database.");
         }
+    }
 
-        // User Login
-        function login() {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    document.getElementById("authMessage").innerText = "Login successful!";
-                    document.getElementById("logoutButton").classList.remove("hidden");
-                    loadFoodData();
-                })
-                .catch(error => {
-                    document.getElementById("authMessage").innerText = error.message;
-                });
-        }
+    function addFoodToLog(foodItem, calories) {
+        totalCalories += calories;
+        document.getElementById("totalCalories").textContent = totalCalories;
 
-        // User Logout
-        function logout() {
-            auth.signOut().then(() => {
-                document.getElementById("authMessage").innerText = "Logout successful!";
-                document.getElementById("logoutButton").classList.add("hidden");
-                clearList();
-            });
-        }
+        const list = document.getElementById("foodList");
+        const entry = document.createElement("li");
+        entry.textContent = `${foodItem} - ${calories} calories`;
+        list.appendChild(entry);
 
-        // Add Food
-        function addFood() {
-            const foodItem = document.getElementById("foodItem").value;
-            if (foodItem) {
-                const calories = estimateCalories(foodItem); // Placeholder function to estimate calories
-                totalCalories += calories;
+        updateProgressBar();
+        document.getElementById("foodItem").value = "";
+    }
 
-                // Save food item to Firestore
-                const userId = auth.currentUser.uid;
-                db.collection("foodItems").add({
-                    userId: userId,
-                    food: foodItem,
-                    calories: calories
-                }).then(() => {
-                    updateFood
+    function updateProgressBar() {
+        const dailyGoal = 2000; // Example daily calorie goal
+        const progressPercentage = (totalCalories / dailyGoal) * 100;
+        const progressBar = document.getElementById("progressBar");
+        
+        progressBar.style.width = Math.min(progressPercentage, 100) + "%";
+        progressBar.textContent = Math.round(progressPercentage) + "% of your daily goal!";
+    }
+</script>
+
+</body>
+</html>
