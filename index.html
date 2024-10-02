@@ -1,215 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calorie Tracking AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #eef2f3;
-            color: #333;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            overflow-x: hidden;
         }
+
         header {
-            background-color: #4CAF50;
             padding: 20px;
             text-align: center;
-            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
+
         h1 {
             margin: 0;
             font-size: 2.5em;
+            animation: fadeIn 1s ease-in;
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
         #container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: auto;
             padding: 20px;
-            background-color: #fff;
+            background: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            color: #333;
+            animation: slideIn 1s ease-in;
         }
-        input[type="text"], input[type="number"], input[type="file"] {
-            padding: 10px;
-            margin: 5px;
-            width: calc(40% - 22px);
-            border: 1px solid #ccc;
-            border-radius: 4px;
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
-        button {
+
+        .button {
             padding: 10px 15px;
             margin: 5px;
-            background-color: #28a745;
+            background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 16px;
         }
-        button:hover {
-            background-color: #218838;
+
+        .button:hover {
+            background-color: #388E3C;
+            transform: scale(1.05);
         }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="password"] {
+            padding: 10px;
+            margin: 5px;
+            width: calc(100% - 22px);
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
         h2 {
             color: #4CAF50;
+            margin-top: 20px;
+            animation: fadeIn 1s ease-in;
         }
+
         #foodList {
             list-style-type: none;
             padding: 0;
         }
-        .link {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-        .clear-button {
-            background-color: #dc3545;
-        }
-        .clear-button:hover {
-            background-color: #c82333;
-        }
+
         .total-calories {
             font-weight: bold;
             color: #d9534f;
             margin-top: 20px;
         }
-        .bmi-result, .body-fat-result {
+
+        .auth-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background: #333;
+            color: white;
             margin-top: 20px;
-            font-weight: bold;
+        }
+
+        /* Advertisement Section */
+        .ad {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            #container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .button {
+                width: 100%;
+            }
         }
     </style>
 </head>
+
 <body>
     <header>
         <h1>Calorie Tracking AI</h1>
     </header>
     <div id="container">
+        <div class="auth-container">
+            <h2>User Authentication</h2>
+            <input type="email" id="email" placeholder="Email" required />
+            <input type="password" id="password" placeholder="Password" required />
+            <button class="button" onclick="register()">Register</button>
+            <button class="button" onclick="login()">Login</button>
+            <button class="button hidden" id="logoutButton" onclick="logout()">Logout</button>
+            <div id="authMessage"></div>
+        </div>
+
+        <h2>Search Food Calories</h2>
+        <input type="text" id="foodSearch" placeholder="Search for Food" />
+        <button class="button" onclick="searchFood()">Search</button>
+
         <h2>Track Food Calories</h2>
-        <input type="file" id="foodImage" accept="image/*" />
-        <button onclick="estimateCalories()">Estimate Calories from Image</button>
-        
+        <input type="text" id="foodItem" placeholder="Enter Food Item" />
+        <button class="button" onclick="addFood()">Add Food</button>
+
         <h2>Food List:</h2>
         <ul id="foodList"></ul>
         <div class="total-calories" id="totalCalories">Total Calories: 0</div>
-        
-        <button class="clear-button" onclick="clearList()">Clear List</button>
 
-        <h2>BMI Calculator</h2>
+        <h2>BMI and Body Fat Calculators</h2>
         <input type="number" id="weight" placeholder="Weight (kg)" />
-        <input type="number" id="height" placeholder="Height (m)" />
-        <button onclick="calculateBMI()">Calculate BMI</button>
-        <div class="bmi-result" id="bmiResult"></div>
+        <input type="number" id="height" placeholder="Height (cm)" />
+        <button class="button" onclick="calculateBMI()">Calculate BMI</button>
+        <div id="bmiResult"></div>
 
-        <h2>Body Fat Percentage Calculator</h2>
-        <input type="number" id="age" placeholder="Age" />
-        <input type="text" id="gender" placeholder="Gender (male/female)" />
-        <input type="number" id="waist" placeholder="Waist Circumference (cm)" />
-        <button onclick="calculateBodyFat()">Calculate Body Fat %</button>
-        <div class="body-fat-result" id="bodyFatResult"></div>
-        
-        <div class="link">
-            <h2><a href="calorieEstimator.html">Estimate Calories from Image</a></h2>
+        <!-- Advertisement Section -->
+        <div class="ad">
+            <h3>Ad Placeholder</h3>
+            <p>Advertise your product here!</p>
         </div>
     </div>
-    
-    <footer class="footer">
+
+    <footer>
         <p>© 2024 Calorie Tracking AI. All rights reserved.</p>
     </footer>
 
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
     <script>
-        // Load food items and total calories from local storage
-        window.onload = function() {
-            const foodItems = JSON.parse(localStorage.getItem("foodItems")) || [];
-            const totalCalories = localStorage.getItem("totalCalories") || 0;
-            foodItems.forEach(item => addToFoodList(item.food, item.calories));
-            document.getElementById("totalCalories").innerText = `Total Calories: ${totalCalories}`;
+        // Firebase configuration (insert your own config here)
+        const firebaseConfig = {
+            apiKey: "26a3d04f97dd41f68bab3d124a3dc4b9",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
-        function estimateCalories() {
-            const fileInput = document.getElementById("foodImage");
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-                // Placeholder for API call to estimate calories
-                // This will typically require uploading the image to an API
-                // Here we just simulate it with a random number for demonstration
-                const estimatedCalories = Math.floor(Math.random() * 500) + 100; // Random calorie estimation
-                addToFoodList(file.name, estimatedCalories);
-                saveToLocalStorage(file.name, estimatedCalories);
-                alert(`Estimated calories for ${file.name}: ${estimatedCalories}`);
-            } else {
-                alert("Please upload a food image.");
-            }
+        let totalCalories = 0;
+
+        // User Registration
+        function register() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    document.getElementById("authMessage").innerText = "Registration successful!";
+                })
+                .catch(error => {
+                    document.getElementById("authMessage").innerText = error.message;
+                });
         }
 
-        function addToFoodList(foodItem, calorieCount) {
-            var list = document.getElementById("foodList");
-            var entry = document.createElement("li");
-            entry.textContent = foodItem + " - " + calorieCount + " calories";
-            list.appendChild(entry);
-
-            // Update total calories displayed
-            updateTotalCalories(parseInt(calorieCount));
+        // User Login
+        function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    document.getElementById("authMessage").innerText = "Login successful!";
+                    document.getElementById("logoutButton").classList.remove("hidden");
+                    loadFoodData();
+                })
+                .catch(error => {
+                    document.getElementById("authMessage").innerText = error.message;
+                });
         }
 
-        function saveToLocalStorage(foodItem, calorieCount) {
-            const foodItems = JSON.parse(localStorage.getItem("foodItems")) || [];
-            foodItems.push({ food: foodItem, calories: parseInt(calorieCount) });
-            localStorage.setItem("foodItems", JSON.stringify(foodItems));
-            const totalCalories = parseInt(localStorage.getItem("totalCalories") || 0) + parseInt(calorieCount);
-            localStorage.setItem("totalCalories", totalCalories);
+        // User Logout
+        function logout() {
+            auth.signOut().then(() => {
+                document.getElementById("authMessage").innerText = "Logout successful!";
+                document.getElementById("logoutButton").classList.add("hidden");
+                clearList();
+            });
         }
 
-        function updateTotalCalories(calories) {
-            const currentTotal = parseInt(localStorage.getItem("totalCalories") || 0);
-            const newTotal = currentTotal + calories;
-            localStorage.setItem("totalCalories", newTotal);
-            document.getElementById("totalCalories").innerText = `Total Calories: ${newTotal}`;
-        }
+        // Add Food
+        function addFood() {
+            const foodItem = document.getElementById("foodItem").value;
+            if (foodItem) {
+                const calories = estimateCalories(foodItem); // Placeholder function to estimate calories
+                totalCalories += calories;
 
-        function clearList() {
-            document.getElementById("foodList").innerHTML = "";
-            localStorage.removeItem("foodItems");
-            localStorage.removeItem("totalCalories");
-            document.getElementById("totalCalories").innerText = "Total Calories: 0";
-        }
-
-        function calculateBMI() {
-            const weight = parseFloat(document.getElementById("weight").value);
-            const height = parseFloat(document.getElementById("height").value);
-            if (weight > 0 && height > 0) {
-                const bmi = (weight / (height * height)).toFixed(2);
-                document.getElementById("bmiResult").innerText = `Your BMI is: ${bmi}`;
-            } else {
-                alert("Please enter valid weight and height.");
-            }
-        }
-
-        function calculateBodyFat() {
-            const age = parseInt(document.getElementById("age").value);
-            const gender = document.getElementById("gender").value.toLowerCase();
-            const waist = parseFloat(document.getElementById("waist").value);
-            let bodyFatPercentage;
-
-            if (gender === "male") {
-                bodyFatPercentage = (1.20 * (waist / 100) + 0.23 * age - 16.2).toFixed(2);
-            } else if (gender === "female") {
-                bodyFatPercentage = (1.20 * (waist / 100) + 0.23 * age - 5.4).toFixed(2);
-            } else {
-                alert("Please enter a valid gender (male/female).");
-                return;
-            }
-
-            document.getElementById("bodyFatResult").innerText = `Your Body Fat Percentage is: ${bodyFatPercentage}%`;
-        }
-    </script>
-</body>
-</html>
+                // Save food item to Firestore
+                const userId = auth.currentUser.uid;
+                db.collection("foodItems").add({
+                    userId: userId,
+                    food: foodItem,
+                    calories: calories
+                }).then(() => {
+                    updateFood
