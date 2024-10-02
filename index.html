@@ -10,17 +10,15 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f4f8;
+            background-color: #f8f9fa;
             color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
         }
 
         header {
-            background: #4CAF50;
+            background: #28a745;
             color: white;
             padding: 20px;
             text-align: center;
@@ -31,6 +29,25 @@
             margin: 0;
         }
 
+        nav {
+            margin: 10px 0;
+        }
+
+        nav button {
+            padding: 10px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        nav button:hover {
+            background-color: #0056b3;
+        }
+
         .container {
             max-width: 600px;
             background: white;
@@ -38,6 +55,9 @@
             border-radius: 8px;
             padding: 20px;
             margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         input[type="text"], input[type="number"] {
@@ -46,125 +66,140 @@
             margin: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 16px;
         }
 
         button {
-            padding: 10px;
+            padding: 10px 15px;
             margin: 5px;
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
 
         ul {
             list-style-type: none;
             padding: 0;
+            width: 100%;
         }
 
         li {
             padding: 8px;
             border-bottom: 1px solid #eee;
-        }
-
-        .progress {
-            background-color: #f3f3f3;
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-
-        .progress-bar {
-            height: 20px;
-            background-color: #4CAF50;
-            width: 0;
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 0.8em;
-            color: #666;
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
 <body>
-
-<header>
-    <h1>Calorie Tracker - Calorie-Tracking-AI</h1>
-</header>
-
-<div class="container">
-    <h2>Log Your Food</h2>
-    <input type="text" id="foodItem" placeholder="Enter Food Item" />
-    <button onclick="estimateCalories()">Estimate Calories</button>
-    <h2>Estimated Calories: <span id="estimatedCalories">0</span></h2>
-
-    <h2>Your Food Log</h2>
-    <ul id="foodList"></ul>
-
-    <h3>Total Calories: <span id="totalCalories">0</span></h3>
-    <div class="progress">
-        <div class="progress-bar" id="progressBar"></div>
+    <header>
+        <h1>Calorie Tracking AI</h1>
+    </header>
+    <nav>
+        <button onclick="showPage('tracker')">Calorie Tracker</button>
+        <button onclick="showPage('bmi')">BMI Calculator</button>
+        <button onclick="showPage('food-search')">Food Search</button>
+    </nav>
+    <div class="container" id="tracker">
+        <h2>Calorie Tracker</h2>
+        <input type="text" id="foodItem" placeholder="Enter Food Item" />
+        <button onclick="estimateCalories()">Estimate Calories</button>
+        <h2>Estimated Calories:</h2>
+        <p id="calorieEstimate"></p>
+        <h2>Food List:</h2>
+        <ul id="foodList"></ul>
     </div>
-</div>
-
-<div class="footer">
-    <p>Developed with ❤️ by Calorie-Tracking-AI</p>
-</div>
-
-<script>
-    let totalCalories = 0;
-
-    function estimateCalories() {
-        const foodItem = document.getElementById("foodItem").value;
-        
-        // Simple calorie estimation based on predefined food items
-        const calorieDatabase = {
+    <div class="container" id="bmi" style="display:none;">
+        <h2>BMI Calculator</h2>
+        <input type="number" id="weight" placeholder="Weight (kg)" />
+        <input type="number" id="height" placeholder="Height (m)" />
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <p id="bmiResult"></p>
+    </div>
+    <div class="container" id="food-search" style="display:none;">
+        <h2>Food Search</h2>
+        <input type="text" id="searchQuery" placeholder="Search for Food" />
+        <button onclick="searchFood()">Search</button>
+        <ul id="searchResults"></ul>
+    </div>
+    
+    <script>
+        var foodEntries = [];
+        var calorieDatabase = {
             "apple": 95,
             "banana": 105,
             "orange": 62,
-            "chicken breast": 165,
+            "chicken": 335,
+            "rice": 206,
             "broccoli": 55,
-            "rice": 206
+            "egg": 68,
+            "bread": 79,
+            "potato": 163,
+            "salmon": 206,
+            "beef": 250
         };
-        
-        const estimatedCalories = calorieDatabase[foodItem.toLowerCase()] || 0;
-        document.getElementById("estimatedCalories").textContent = estimatedCalories;
 
-        if (estimatedCalories > 0) {
-            addFoodToLog(foodItem, estimatedCalories);
-        } else {
-            alert("Food item not found in the database.");
+        function showPage(pageId) {
+            document.getElementById('tracker').style.display = 'none';
+            document.getElementById('bmi').style.display = 'none';
+            document.getElementById('food-search').style.display = 'none';
+            document.getElementById(pageId).style.display = 'block';
         }
-    }
 
-    function addFoodToLog(foodItem, calories) {
-        totalCalories += calories;
-        document.getElementById("totalCalories").textContent = totalCalories;
+        function estimateCalories() {
+            var foodItem = document.getElementById("foodItem").value.toLowerCase();
+            if (calorieDatabase[foodItem]) {
+                var estimatedCalories = calorieDatabase[foodItem];
+                document.getElementById("calorieEstimate").textContent = foodItem.charAt(0).toUpperCase() + foodItem.slice(1) + ": " + estimatedCalories + " calories";
+                foodEntries.push(foodItem);
+                updateFoodList();
+            } else {
+                document.getElementById("calorieEstimate").textContent = "Food item not found. Please try again.";
+            }
+            document.getElementById("foodItem").value = "";
+        }
 
-        const list = document.getElementById("foodList");
-        const entry = document.createElement("li");
-        entry.textContent = `${foodItem} - ${calories} calories`;
-        list.appendChild(entry);
+        function updateFoodList() {
+            var list = document.getElementById("foodList");
+            list.innerHTML = "";
+            foodEntries.forEach(function(food) {
+                var entry = document.createElement("li");
+                entry.textContent = food;
+                list.appendChild(entry);
+            });
+        }
 
-        updateProgressBar();
-        document.getElementById("foodItem").value = "";
-    }
+        function calculateBMI() {
+            var weight = parseFloat(document.getElementById("weight").value);
+            var height = parseFloat(document.getElementById("height").value);
+            if (weight && height) {
+                var bmi = weight / (height * height);
+                document.getElementById("bmiResult").textContent = "Your BMI is " + bmi.toFixed(2);
+            } else {
+                alert("Please enter both weight and height.");
+            }
+        }
 
-    function updateProgressBar() {
-        const dailyGoal = 2000; // Example daily calorie goal
-        const progressPercentage = (totalCalories / dailyGoal) * 100;
-        const progressBar = document.getElementById("progressBar");
-        
-        progressBar.style.width = Math.min(progressPercentage, 100) + "%";
-        progressBar.textContent = Math.round(progressPercentage) + "% of your daily goal!";
-    }
-</script>
-
+        function searchFood() {
+            var query = document.getElementById("searchQuery").value.toLowerCase();
+            var results = document.getElementById("searchResults");
+            results.innerHTML = "";
+            if (calorieDatabase[query]) {
+                var entry = document.createElement("li");
+                entry.textContent = query.charAt(0).toUpperCase() + query.slice(1) + ": " + calorieDatabase[query] + " calories";
+                results.appendChild(entry);
+            } else {
+                results.innerHTML = "<li>Food not found!</li>";
+            }
+        }
+    </script>
 </body>
 </html>
