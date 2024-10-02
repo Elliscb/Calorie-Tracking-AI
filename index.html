@@ -30,7 +30,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        input[type="text"], input[type="number"] {
+        input[type="text"], input[type="number"], input[type="file"] {
             padding: 10px;
             margin: 5px;
             width: calc(40% - 22px);
@@ -81,6 +81,10 @@
             color: #d9534f;
             margin-top: 20px;
         }
+        .bmi-result, .body-fat-result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -88,15 +92,28 @@
         <h1>Calorie Tracking AI</h1>
     </header>
     <div id="container">
-        <input type="text" id="foodItem" placeholder="Enter Food Item" />
-        <input type="number" id="calorieCount" placeholder="Enter Calorie Count" />
-        <button onclick="addFood()">Add Food</button>
-        <button class="clear-button" onclick="clearList()">Clear List</button>
+        <h2>Track Food Calories</h2>
+        <input type="file" id="foodImage" accept="image/*" />
+        <button onclick="estimateCalories()">Estimate Calories from Image</button>
         
         <h2>Food List:</h2>
         <ul id="foodList"></ul>
-        
         <div class="total-calories" id="totalCalories">Total Calories: 0</div>
+        
+        <button class="clear-button" onclick="clearList()">Clear List</button>
+
+        <h2>BMI Calculator</h2>
+        <input type="number" id="weight" placeholder="Weight (kg)" />
+        <input type="number" id="height" placeholder="Height (m)" />
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <div class="bmi-result" id="bmiResult"></div>
+
+        <h2>Body Fat Percentage Calculator</h2>
+        <input type="number" id="age" placeholder="Age" />
+        <input type="text" id="gender" placeholder="Gender (male/female)" />
+        <input type="number" id="waist" placeholder="Waist Circumference (cm)" />
+        <button onclick="calculateBodyFat()">Calculate Body Fat %</button>
+        <div class="body-fat-result" id="bodyFatResult"></div>
         
         <div class="link">
             <h2><a href="calorieEstimator.html">Estimate Calories from Image</a></h2>
@@ -116,16 +133,20 @@
             document.getElementById("totalCalories").innerText = `Total Calories: ${totalCalories}`;
         };
 
-        function addFood() {
-            var foodItem = document.getElementById("foodItem").value;
-            var calorieCount = document.getElementById("calorieCount").value;
-            if (foodItem && calorieCount) {
-                addToFoodList(foodItem, calorieCount);
-                saveToLocalStorage(foodItem, calorieCount);
-                document.getElementById("foodItem").value = "";
-                document.getElementById("calorieCount").value = "";
+        function estimateCalories() {
+            const fileInput = document.getElementById("foodImage");
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+
+                // Placeholder for API call to estimate calories
+                // This will typically require uploading the image to an API
+                // Here we just simulate it with a random number for demonstration
+                const estimatedCalories = Math.floor(Math.random() * 500) + 100; // Random calorie estimation
+                addToFoodList(file.name, estimatedCalories);
+                saveToLocalStorage(file.name, estimatedCalories);
+                alert(`Estimated calories for ${file.name}: ${estimatedCalories}`);
             } else {
-                alert("Please enter both food item and calorie count.");
+                alert("Please upload a food image.");
             }
         }
 
@@ -159,6 +180,35 @@
             localStorage.removeItem("foodItems");
             localStorage.removeItem("totalCalories");
             document.getElementById("totalCalories").innerText = "Total Calories: 0";
+        }
+
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById("weight").value);
+            const height = parseFloat(document.getElementById("height").value);
+            if (weight > 0 && height > 0) {
+                const bmi = (weight / (height * height)).toFixed(2);
+                document.getElementById("bmiResult").innerText = `Your BMI is: ${bmi}`;
+            } else {
+                alert("Please enter valid weight and height.");
+            }
+        }
+
+        function calculateBodyFat() {
+            const age = parseInt(document.getElementById("age").value);
+            const gender = document.getElementById("gender").value.toLowerCase();
+            const waist = parseFloat(document.getElementById("waist").value);
+            let bodyFatPercentage;
+
+            if (gender === "male") {
+                bodyFatPercentage = (1.20 * (waist / 100) + 0.23 * age - 16.2).toFixed(2);
+            } else if (gender === "female") {
+                bodyFatPercentage = (1.20 * (waist / 100) + 0.23 * age - 5.4).toFixed(2);
+            } else {
+                alert("Please enter a valid gender (male/female).");
+                return;
+            }
+
+            document.getElementById("bodyFatResult").innerText = `Your Body Fat Percentage is: ${bodyFatPercentage}%`;
         }
     </script>
 </body>
