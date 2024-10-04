@@ -10,20 +10,33 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f4f8;
+            background-color: #ffefef;
             color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         header {
-            background: #4CAF50;
+            background: #ff0000;
             color: white;
             padding: 20px;
             text-align: center;
             width: 100%;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(255, 0, 0, 1); }
+            100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
         }
 
         h1 {
@@ -43,7 +56,7 @@
         nav button {
             padding: 10px 15px;
             margin: 5px;
-            background-color: #007bff;
+            background-color: #ff4d4d;
             color: white;
             border: none;
             border-radius: 4px;
@@ -53,7 +66,7 @@
         }
 
         nav button:hover {
-            background-color: #0056b3;
+            background-color: #cc0000;
         }
 
         .container {
@@ -70,19 +83,10 @@
             display: block; /* Show active section */
         }
 
-        input[type="text"], input[type="number"] {
-            width: calc(50% - 20px);
-            padding: 10px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
         button {
             padding: 10px 15px;
             margin: 5px;
-            background-color: #007bff;
+            background-color: #ff4d4d;
             color: white;
             border: none;
             border-radius: 4px;
@@ -92,20 +96,7 @@
         }
 
         button:hover {
-            background-color: #0056b3;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-            width: 100%;
-        }
-
-        li {
-            padding: 8px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
+            background-color: #cc0000;
         }
 
         footer {
@@ -115,25 +106,37 @@
             font-size: 14px;
             color: #777;
         }
+
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #ff0000;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Calorie Tracking AI</h1>
+        <h1>Ellis Cooper Brown is a Sigma</h1>
     </header>
     <nav>
-        <button onclick="showPage('tracker')">Calorie Tracker</button>
+        <button onclick="showPage('photo')">Calorie Estimator</button>
         <button onclick="showPage('bmi')">BMI Calculator</button>
-        <button onclick="showPage('food-search')">Food Search</button>
     </nav>
-    <div class="container active" id="tracker">
-        <h2>Calorie Tracker</h2>
-        <input type="text" id="foodItem" placeholder="Enter Food Item" />
-        <button onclick="estimateCalories()">Estimate Calories</button>
+    <div class="container active" id="photo">
+        <h2>Take a Photo of Food</h2>
+        <input type="file" accept="image/*" id="foodPhoto" capture="camera" onchange="uploadPhoto()">
+        <div class="loader" id="loader"></div>
         <h2>Estimated Calories:</h2>
         <p id="calorieEstimate"></p>
-        <h2>Food List:</h2>
-        <ul id="foodList"></ul>
     </div>
     <div class="container" id="bmi">
         <h2>BMI Calculator</h2>
@@ -142,62 +145,44 @@
         <button onclick="calculateBMI()">Calculate BMI</button>
         <p id="bmiResult"></p>
     </div>
-    <div class="container" id="food-search">
-        <h2>Food Search</h2>
-        <input type="text" id="searchQuery" placeholder="Search for Food" />
-        <button onclick="searchFood()">Search</button>
-        <ul id="searchResults"></ul>
-    </div>
     
     <footer>
         <p>&copy; 2024 Calorie Tracking AI. All rights reserved.</p>
     </footer>
 
     <script>
-        var foodEntries = [];
-        var calorieDatabase = {
-            "apple": 95,
-            "banana": 105,
-            "orange": 62,
-            "chicken": 335,
-            "rice": 206,
-            "broccoli": 55,
-            "egg": 68,
-            "bread": 79,
-            "potato": 163,
-            "salmon": 206,
-            "beef": 250
-        };
-
         function showPage(pageId) {
-            // Hide all containers
             const containers = document.querySelectorAll('.container');
             containers.forEach(container => container.classList.remove('active'));
-
-            // Show the selected container
             document.getElementById(pageId).classList.add('active');
         }
 
-        function estimateCalories() {
-            var foodItem = document.getElementById("foodItem").value.toLowerCase();
-            if (calorieDatabase[foodItem]) {
-                var estimatedCalories = calorieDatabase[foodItem];
-                document.getElementById("calorieEstimate").textContent = foodItem.charAt(0).toUpperCase() + foodItem.slice(1) + ": " + estimatedCalories + " calories";
-                foodEntries.push(foodItem);
-                updateFoodList();
-            } else {
-                document.getElementById("calorieEstimate").textContent = "Food item not found. Please try again.";
-            }
-            document.getElementById("foodItem").value = "";
-        }
+        function uploadPhoto() {
+            var loader = document.getElementById("loader");
+            loader.style.display = "block";
 
-        function updateFoodList() {
-            var list = document.getElementById("foodList");
-            list.innerHTML = "";
-            foodEntries.forEach(function(food) {
-                var entry = document.createElement("li");
-                entry.textContent = food;
-                list.appendChild(entry);
+            var photo = document.getElementById("foodPhoto").files[0];
+            var formData = new FormData();
+            formData.append("image", photo);
+            formData.append("api_key", "26a3d04f97dd41f68bab3d124a3dc4b9");
+
+            fetch("https://api.example.com/estimate-calories", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loader.style.display = "none";
+                if (data.success) {
+                    document.getElementById("calorieEstimate").textContent = "Estimated Calories: " + data.calories + " calories";
+                } else {
+                    document.getElementById("calorieEstimate").textContent = "Error: " + data.message;
+                }
+            })
+            .catch(error => {
+                loader.style.display = "none";
+                document.getElementById("calorieEstimate").textContent = "Error estimating calories. Please try again.";
+                console.error("Error:", error);
             });
         }
 
@@ -209,19 +194,6 @@
                 document.getElementById("bmiResult").textContent = "Your BMI is " + bmi.toFixed(2);
             } else {
                 alert("Please enter both weight and height.");
-            }
-        }
-
-        function searchFood() {
-            var query = document.getElementById("searchQuery").value.toLowerCase();
-            var results = document.getElementById("searchResults");
-            results.innerHTML = "";
-            if (calorieDatabase[query]) {
-                var entry = document.createElement("li");
-                entry.textContent = query.charAt(0).toUpperCase() + query.slice(1) + ": " + calorieDatabase[query] + " calories";
-                results.appendChild(entry);
-            } else {
-                results.innerHTML = "<li>Food not found!</li>";
             }
         }
     </script>
