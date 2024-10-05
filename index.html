@@ -3,246 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calorie Tracking AI</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f4f8;
-            color: #333;
-            display: flex;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        body.dark {
-            background-color: #333;
-            color: #f0f4f8;
-        }
-
-        .sidebar {
-            width: 200px;
-            background: red;
-            color: white;
-            padding: 20px;
-            height: 100vh;
-            position: fixed;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar h2 {
-            text-align: center;
-        }
-
-        .sidebar button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            background-color: #900;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .sidebar button:hover {
-            background-color: #c00;
-        }
-
-        .content {
-            margin-left: 220px;
-            padding: 20px;
-            width: calc(100% - 220px);
-            transition: margin-left 0.3s ease;
-        }
-
-        .container {
-            max-width: 800px;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            display: none; /* Hide all sections initially */
-        }
-
-        .container.active {
-            display: block; /* Show active section */
-        }
-
-        header {
-            background: red;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            width: 100%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        footer {
-            margin-top: auto;
-            padding: 10px;
-            text-align: center;
-            font-size: 14px;
-            color: #777;
-        }
-
-        input[type="file"] {
-            margin: 10px 0;
-        }
-
-        /* Adding animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: static;
-                width: 100%;
-                height: auto;
-            }
-
-            .content {
-                margin-left: 0;
-                width: 100%;
-            }
-        }
-    </style>
+    <title>Fitness App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Calorie Tracking AI</h1>
-    </header>
-
     <div class="sidebar">
-        <h2>Menu</h2>
-        <button onclick="showPage('home')">Home</button>
-        <button onclick="showPage('calorie-estimator')">Calorie Estimator</button>
-        <button onclick="showPage('bmr-calculator')">BMR Calculator</button>
-        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
-    </div>
-
-    <div class="content">
-        <div class="container active fade-in" id="home">
-            <h2>Welcome to Calorie Tracking AI</h2>
-            <p>Your go-to platform for tracking calories through food images!</p>
-        </div>
-
-        <div class="container fade-in" id="calorie-estimator">
-            <h2>Calorie Estimator</h2>
-            <input type="file" id="foodImage" accept="image/*" />
-            <button onclick="uploadFoodImage()">Estimate Calories</button>
-            <h2>Estimated Calories:</h2>
-            <p id="calorieEstimate"></p>
-            <h2>Food Log:</h2>
-            <ul id="foodList"></ul>
-        </div>
-
-        <div class="container fade-in" id="bmr-calculator">
-            <h2>BMR Calculator</h2>
-            <input type="number" id="weight" placeholder="Weight (kg)" />
-            <input type="number" id="height" placeholder="Height (cm)" />
-            <input type="number" id="age" placeholder="Age (years)" />
-            <button onclick="calculateBMR()">Calculate BMR</button>
-            <h2>Your BMR:</h2>
-            <p id="bmrResult"></p>
-        </div>
+        <h2>Fitness App</h2>
+        <ul>
+            <li><a href="#landing" class="menu-item">Landing</a></li>
+            <li><a href="#calorie-estimator" class="menu-item">Calorie Estimator</a></li>
+            <li><a href="#bmr-calculator" class="menu-item">BMR Calculator</a></li>
+            <li><a href="#photo-estimator" class="menu-item">Photo Estimator</a></li>
+        </ul>
     </div>
     
-    <footer>
-        &copy; 2024 Calorie Tracking AI. All rights reserved.
-    </footer>
+    <div class="content">
+        <div id="landing" class="page">
+            <h1>Start Your Fitness Journey!</h1>
+            <button id="start-button">Get Started</button>
+        </div>
+        
+        <div id="calorie-estimator" class="page" style="display: none;">
+            <h2>Calorie Estimator</h2>
+            <input type="text" id="food-input" placeholder="Enter food name">
+            <button id="estimate-button">Estimate Calories</button>
+            <div id="calorie-result"></div>
+        </div>
+
+        <div id="bmr-calculator" class="page" style="display: none;">
+            <h2>BMR Calculator</h2>
+            <label for="weight">Weight (kg): </label>
+            <input type="number" id="weight" placeholder="Weight">
+            <label for="height">Height (cm): </label>
+            <input type="number" id="height" placeholder="Height">
+            <label for="age">Age: </label>
+            <input type="number" id="age" placeholder="Age">
+            <button id="calculate-bmr">Calculate BMR</button>
+            <div id="bmr-result"></div>
+        </div>
+
+        <div id="photo-estimator" class="page" style="display: none;">
+            <h2>Photo Calorie Estimator</h2>
+            <input type="file" id="photo-input">
+            <button id="photo-estimate-button">Estimate from Photo</button>
+            <div id="photo-result"></div>
+        </div>
+    </div>
 
     <script>
-        let darkMode = false;
-        let foodEntries = [];
+        const consumerKey = '735c89eaf27e473baf5589c77fdd3cee';
+        const consumerSecret = 'c337b8543fe44ee686b105e3d8004ae5';
+        const baseUrl = 'https://platform.fatsecret.com/rest/server.api';
 
-        function showPage(page) {
-            const containers = document.querySelectorAll('.container');
-            containers.forEach(container => {
-                container.classList.remove('active');
+        $(document).ready(function() {
+            $('#start-button').on('click', function() {
+                $('.page').hide();
+                $('#calorie-estimator').show();
             });
-            document.getElementById(page).classList.add('active');
-        }
 
-        function toggleDarkMode() {
-            darkMode = !darkMode;
-            document.body.classList.toggle('dark', darkMode);
-        }
+            $('.menu-item').on('click', function(e) {
+                e.preventDefault();
+                const targetPage = $(this).attr('href');
+                $('.page').hide();
+                $(targetPage).show();
+            });
 
-        function uploadFoodImage() {
-            const fileInput = document.getElementById('foodImage');
-            const file = fileInput.files[0];
-            if (file) {
-                const formData = new FormData();
-                formData.append('file', file);
-
-                // API call for calorie estimation
-                fetch('https://platform.fatsecret.com/rest/server.api', {
+            $('#estimate-button').on('click', function() {
+                const foodName = $('#food-input').val();
+                $.ajax({
+                    url: baseUrl,
                     method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Authorization': 'Bearer 26a3d04f97dd41f68bab3d124a3dc4b9',
-                        'Content-Type': 'application/json'
+                    data: {
+                        method: 'food.find',
+                        search_expression: foodName,
+                        format: 'json',
+                        oauth_consumer_key: consumerKey,
+                        oauth_signature: consumerSecret,
                     },
-                    body: JSON.stringify({
+                    success: function(response) {
+                        const foodId = response.foods.food[0].food_id;
+                        getCalories(foodId);
+                    },
+                    error: function() {
+                        $('#calorie-result').text('Error retrieving food data.');
+                    }
+                });
+            });
+
+            function getCalories(foodId) {
+                $.ajax({
+                    url: baseUrl,
+                    method: 'POST',
+                    data: {
                         method: 'food.get.v4',
-                        food_id: 33691, // Replace with the actual food ID
-                        format: 'json'
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('calorieEstimate').innerText = `${data.calories} calories`;
-                    addToFoodList(data.food);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+                        food_id: foodId,
+                        format: 'json',
+                        oauth_consumer_key: consumerKey,
+                        oauth_signature: consumerSecret,
+                    },
+                    success: function(data) {
+                        const calories = data.food.serving_sizes.serving[0].calories;
+                        $('#calorie-result').text(`Estimated calories: ${calories}`);
+                    },
+                    error: function() {
+                        $('#calorie-result').text('Error retrieving calorie data.');
+                    }
                 });
             }
-        }
 
-        function addToFoodList(foodItem) {
-            const foodList = document.getElementById('foodList');
-            const li = document.createElement('li');
-            li.textContent = foodItem;
-            foodList.appendChild(li);
-            foodEntries.push(foodItem); // Keep track of food items
-            localStorage.setItem('foodEntries', JSON.stringify(foodEntries)); // Save to local storage
-        }
+            $('#calculate-bmr').on('click', function() {
+                const weight = parseFloat($('#weight').val());
+                const height = parseFloat($('#height').val());
+                const age = parseInt($('#age').val());
+                const bmr = 10 * weight + 6.25 * height - 5 * age + 5; // Mifflin-St Jeor Equation for men
+                $('#bmr-result').text(`Your BMR is: ${bmr.toFixed(2)} calories/day`);
+            });
 
-        function calculateBMR() {
-            const weight = parseFloat(document.getElementById('weight').value);
-            const height = parseFloat(document.getElementById('height').value);
-            const age = parseInt(document.getElementById('age').value);
-
-            if (!weight || !height || !age) {
-                alert("Please fill in all fields.");
-                return;
-            }
-
-            const bmr = 10 * weight + 6.25 * height - 5 * age + 5; // Mifflin-St Jeor Equation for men
-            document.getElementById('bmrResult').innerText = `Your BMR is ${bmr.toFixed(2)} calories/day`;
-        }
-
-        // Load food log from local storage on page load
-        window.onload = function() {
-            const savedEntries = JSON.parse(localStorage.getItem('foodEntries'));
-            if (savedEntries) {
-                foodEntries = savedEntries;
-                foodEntries.forEach(addToFoodList);
-            }
-        };
+            $('#photo-estimate-button').on('click', function() {
+                // Placeholder for photo estimation logic
+                $('#photo-result').text('Photo estimation feature not implemented yet.');
+            });
+        });
     </script>
+    <style>
+        body {
+            display: flex;
+            background-color: red;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            background-color: #d30000;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow: auto;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff5722;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e64a19;
+        }
+        .page {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+    </style>
 </body>
 </html>
