@@ -103,6 +103,37 @@
             font-size: 14px;
             color: #777;
         }
+
+        #landing {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('https://source.unsplash.com/featured/?fitness,healthy') center/cover no-repeat;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .bounce {
+            animation: bounce 1s ease forwards;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -110,13 +141,18 @@
         <h1>Ellis Cooper Brown is a Sigma</h1>
     </header>
 
-    <nav>
+    <div class="container" id="landing">
+        <h2>Welcome to Your Health Journey</h2>
+        <button onclick="goToHome()">Enter</button>
+    </div>
+
+    <nav style="display: none;" id="nav">
         <button onclick="showPage('home')">Home</button>
         <button onclick="showPage('calorie-estimator')">Calorie Estimator</button>
         <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </nav>
 
-    <div class="container active" id="home">
+    <div class="container" id="home">
         <h2>Welcome to Calorie Tracking AI</h2>
         <p>Your go-to platform for tracking calories through food images!</p>
     </div>
@@ -130,7 +166,7 @@
         <h2>Food Log:</h2>
         <ul id="foodList"></ul>
     </div>
-    
+
     <footer>
         &copy; 2024 Calorie Tracking AI. All rights reserved.
     </footer>
@@ -138,6 +174,14 @@
     <script>
         let darkMode = false;
         let foodEntries = [];
+
+        function goToHome() {
+            document.getElementById('landing').style.display = 'none';
+            document.getElementById('nav').style.display = 'flex';
+            document.getElementById('home').classList.add('active');
+            document.getElementById('home').scrollIntoView({ behavior: 'smooth' });
+            document.querySelector('header').classList.add('bounce');
+        }
 
         function showPage(page) {
             const containers = document.querySelectorAll('.container');
