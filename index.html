@@ -3,263 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitness App</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-</head>
-<body>
-    <div id="landing" class="landing-page">
-        <div class="animation-container">
-            <canvas id="animationCanvas"></canvas>
-            <div class="landing-content">
-                <h1>Kickstart Your Fitness Journey</h1>
-                <button id="startButton" class="animated-button">Get Started</button>
-            </div>
-        </div>
-    </div>
-
-    <nav class="sidebar" id="sidebar" style="display: none;">
-        <button onclick="navigate('home')">Home</button>
-        <button onclick="navigate('calorie-estimator')">Calorie Estimator</button>
-        <button onclick="navigate('bmr-calculator')">BMR Calculator</button>
-        <button onclick="navigate('about')">About</button>
-    </nav>
-
-    <div id="content" class="content" style="display: none;">
-        <!-- Main content will be injected here -->
-    </div>
-
-    <script>
-        const canvas = document.getElementById("animationCanvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = 100;
-        canvas.height = 100;
-
-        // Simple eating animation
-        function animateEating() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "red"; // Food color
-            ctx.beginPath();
-            ctx.arc(50, 50, 30, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Animate eating
-            gsap.to({ y: 50 }, {
-                y: 0,
-                duration: 1,
-                onUpdate: function() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = "red";
-                    ctx.beginPath();
-                    ctx.arc(50, this.targets()[0].y, 30, 0, Math.PI * 2);
-                    ctx.fill();
-                },
-                onComplete: function() {
-                    alert("Let's Get Started!");
-                    document.getElementById("landing").style.display = "none"; // Hide landing
-                    document.getElementById("sidebar").style.display = "flex"; // Show sidebar
-                    document.getElementById("content").style.display = "block"; // Show content
-                    navigate('home'); // Load home page content
-                }
-            });
-        }
-
-        document.getElementById("startButton").addEventListener("click", animateEating);
-
-        function navigate(page) {
-            const content = document.getElementById("content");
-            switch(page) {
-                case 'home':
-                    content.innerHTML = "<h2>Welcome to Your Fitness App!</h2><p>This is your hub for tracking calories and calculating your BMR.</p>";
-                    break;
-                case 'calorie-estimator':
-                    content.innerHTML = `
-                        <h2>Calorie Estimator</h2>
-                        <form id="calorieForm">
-                            <label for="weight">Weight (kg):</label>
-                            <input type="number" id="weight" required>
-                            <label for="height">Height (cm):</label>
-                            <input type="number" id="height" required>
-                            <label for="age">Age:</label>
-                            <input type="number" id="age" required>
-                            <label for="activityLevel">Activity Level:</label>
-                            <select id="activityLevel">
-                                <option value="1.2">Sedentary</option>
-                                <option value="1.375">Lightly active</option>
-                                <option value="1.55">Moderately active</option>
-                                <option value="1.725">Very active</option>
-                                <option value="1.9">Super active</option>
-                            </select>
-                            <button type="submit">Calculate Calories</button>
-                        </form>
-                        <p id="calorieResult"></p>
-                    `;
-                    document.getElementById("calorieForm").addEventListener("submit", calculateCalories);
-                    break;
-                case 'bmr-calculator':
-                    content.innerHTML = `
-                        <h2>BMR Calculator</h2>
-                        <form id="bmrForm">
-                            <label for="bmrWeight">Weight (kg):</label>
-                            <input type="number" id="bmrWeight" required>
-                            <label for="bmrHeight">Height (cm):</label>
-                            <input type="number" id="bmrHeight" required>
-                            <label for="bmrAge">Age:</label>
-                            <input type="number" id="bmrAge" required>
-                            <label for="gender">Gender:</label>
-                            <select id="gender">
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                            <button type="submit">Calculate BMR</button>
-                        </form>
-                        <p id="bmrResult"></p>
-                    `;
-                    document.getElementById("bmrForm").addEventListener("submit", calculateBMR);
-                    break;
-                case 'about':
-                    content.innerHTML = "<h2>About This App</h2><p>This app helps you manage your fitness journey.</p>";
-                    break;
-                default:
-                    content.innerHTML = "<h2>Page Not Found</h2>";
-            }
-        }
-
-        function calculateCalories(event) {
-            event.preventDefault();
-            const weight = parseFloat(document.getElementById("weight").value);
-            const height = parseFloat(document.getElementById("height").value);
-            const age = parseInt(document.getElementById("age").value);
-            const activityLevel = parseFloat(document.getElementById("activityLevel").value);
-
-            // Using Mifflin-St Jeor Equation to calculate TDEE
-            const tdee = (10 * weight) + (6.25 * height) - (5 * age) + 5; // For males
-            const caloriesNeeded = tdee * activityLevel;
-
-            document.getElementById("calorieResult").innerText = `Your estimated daily calorie needs are: ${Math.round(caloriesNeeded)} calories.`;
-        }
-
-        function calculateBMR(event) {
-            event.preventDefault();
-            const weight = parseFloat(document.getElementById("bmrWeight").value);
-            const height = parseFloat(document.getElementById("bmrHeight").value);
-            const age = parseInt(document.getElementById("bmrAge").value);
-            const gender = document.getElementById("gender").value;
-
-            let bmr;
-            if (gender === 'male') {
-                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
-            } else {
-                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
-            }
-
-            document.getElementById("bmrResult").innerText = `Your BMR is: ${Math.round(bmr)} calories.`;
-        }
-    </script>
+    <title>Calorie Tracking AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
+            font-family: 'Arial', sans-serif;
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f44336; /* Red background */
-            color: white;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .landing-page {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        body.dark {
+            background-color: #333;
+            color: #f0f4f8;
+        }
+
+        #sidebar {
+            width: 200px;
+            background: red;
             height: 100vh;
-            position: relative;
-            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
         }
 
-        .animation-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
+        #sidebar h2 {
+            color: white;
+            margin-left: 20px;
+        }
+
+        #sidebar a {
+            padding: 15px 20px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        #sidebar a:hover {
+            background: #900;
+        }
+
+        #main {
+            margin-left: 220px;
+            padding: 20px;
+            width: calc(100% - 220px);
+            transition: margin-left 0.3s;
+        }
+
+        #landing {
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            height: 100vh;
             flex-direction: column;
+            background: url('your-background-image-url') no-repeat center center/cover;
+            animation: fadeIn 1s;
         }
 
-        #animationCanvas {
-            width: 100px;
-            height: 100px;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .landing-content {
-            position: absolute;
-            text-align: center;
-        }
-
-        .animated-button {
-            background-color: #ff5722; /* Bright button color */
-            border: none;
+        button {
             padding: 15px 30px;
             font-size: 20px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .animated-button:hover {
-            background-color: #e64a19;
-        }
-
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 200px;
-            height: 100%;
-            background-color: rgba(255, 87, 34, 0.9);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-            z-index: 1000; /* Ensures the sidebar is on top */
-        }
-
-        .sidebar button {
-            background-color: transparent;
             border: none;
-            color: white;
-            padding: 10px;
-            text-align: left;
-            cursor: pointer;
-            font-size: 18px;
-            margin: 5px 0;
-            transition: background-color 0.3s;
             border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            background-color: #c00;
+            color: white;
+            font-weight: bold;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
 
-        .sidebar button:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        button:hover {
+            background-color: #900;
         }
 
-        .content {
-            margin-left: 220px; /* Sidebar width */
+        .container {
+            display: none;
+            margin-top: 20px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
             padding: 20px;
         }
 
-        /* Responsive Design */
+        .container.active {
+            display: block;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+        }
+
+        /* Add mobile responsiveness */
         @media (max-width: 768px) {
-            .sidebar {
+            #sidebar {
                 width: 100%;
                 height: auto;
-                position: static;
+                position: relative;
             }
-
-            .content {
-                margin-left: 0; /* No margin for mobile */
-            }
-
-            #animationCanvas {
-                width: 80px;
-                height: 80px;
+            #main {
+                margin-left: 0;
+                width: 100%;
             }
         }
     </style>
+</head>
+<body>
+    <div id="sidebar">
+        <h2>Calorie Tracker</h2>
+        <a href="#" onclick="showPage('landing')">Landing</a>
+        <a href="#" onclick="showPage('calorie-estimator')">Calorie Estimator</a>
+        <a href="#" onclick="showPage('bmr-calculator')">BMR Calculator</a>
+        <a href="#" onclick="toggleDarkMode()">Toggle Dark Mode</a>
+    </div>
+
+    <div id="main">
+        <div id="landing" class="container active">
+            <h1>Start Your Fitness Journey</h1>
+            <button onclick="startAnimation()">Get Started</button>
+        </div>
+
+        <div id="calorie-estimator" class="container">
+            <h2>Calorie Estimator</h2>
+            <input type="file" id="foodImage" accept="image/*" />
+            <button onclick="uploadFoodImage()">Estimate Calories</button>
+            <h2>Estimated Calories:</h2>
+            <p id="calorieEstimate"></p>
+            <h2>Food Log:</h2>
+            <ul id="foodList"></ul>
+        </div>
+        
+        <div id="bmr-calculator" class="container">
+            <h2>BMR Calculator</h2>
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" />
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" />
+            <label for="age">Age (years):</label>
+            <input type="number" id="age" />
+            <button onclick="calculateBMR()">Calculate BMR</button>
+            <h2>Your BMR:</h2>
+            <p id="bmrResult"></p>
+        </div>
+    </div>
+    
+    <footer>
+        &copy; 2024 Calorie Tracking AI. All rights reserved.
+    </footer>
+
+    <script>
+        let darkMode = false;
+        let foodEntries = [];
+
+        function showPage(page) {
+            const containers = document.querySelectorAll('.container');
+            containers.forEach(container => {
+                container.classList.remove('active');
+            });
+            document.getElementById(page).classList.add('active');
+        }
+
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            document.body.classList.toggle('dark', darkMode);
+            const sidebarLinks = document.querySelectorAll('#sidebar a');
+            sidebarLinks.forEach(link => {
+                link.style.color = darkMode ? '#f0f4f8' : 'white';
+            });
+        }
+
+        function uploadFoodImage() {
+            const fileInput = document.getElementById('foodImage');
+            const file = fileInput.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                // API call for calorie estimation
+                fetch('https://platform.fatsecret.com/rest/server.api', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Authorization': 'Bearer 26a3d04f97dd41f68bab3d124a3dc4b9',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('calorieEstimate').innerText = `${data.calories} calories`;
+                    addToFoodList(data.food);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        }
+
+        function addToFoodList(foodItem) {
+            const foodList = document.getElementById('foodList');
+            const li = document.createElement('li');
+            li.textContent = foodItem;
+            foodList.appendChild(li);
+            foodEntries.push(foodItem); // Keep track of food items
+            localStorage.setItem('foodEntries', JSON.stringify(foodEntries)); // Save to local storage
+        }
+
+        // Load food log from local storage on page load
+        window.onload = function() {
+            const savedEntries = JSON.parse(localStorage.getItem('foodEntries'));
+            if (savedEntries) {
+                foodEntries = savedEntries;
+                foodEntries.forEach(addToFoodList);
+            }
+        };
+
+        function startAnimation() {
+            const landing = document.getElementById('landing');
+            landing.innerHTML += '<p>Eating animation here...</p>';
+            setTimeout(() => {
+                showPage('calorie-estimator');
+            }, 2000); // Wait for animation before going to estimator
+        }
+
+        function calculateBMR() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const age = parseFloat(document.getElementById('age').value);
+
+            if (weight && height && age) {
+                const bmr = 10 * weight + 6.25 * height - 5 * age + 5; // Mifflin-St Jeor Equation for men
+                document.getElementById('bmrResult').innerText = `Your BMR is ${bmr.toFixed(2)} kcal/day`;
+            } else {
+                alert('Please fill in all fields.');
+            }
+        }
+    </script>
 </body>
 </html>
