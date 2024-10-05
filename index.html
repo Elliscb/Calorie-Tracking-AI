@@ -10,190 +10,235 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #ffefef;
-            color: #333;
+            background: linear-gradient(135deg, #ff4d4d, #ff1a1a);
+            color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         header {
-            background: #ff0000;
+            position: relative;
+            background: #b30000;
             color: white;
-            padding: 20px;
+            padding: 30px;
             text-align: center;
             width: 100%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            animation: pulse 2s infinite;
+            font-size: 2.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            text-shadow: 2px 2px 5px #000;
         }
 
-        @keyframes pulse {
-            0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
-            50% { text-shadow: 0 0 20px rgba(255, 0, 0, 1); }
-            100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.5);
+            filter: blur(60px);
+            z-index: -1;
+            transform: translate(-50%, -50%);
         }
 
-        h1 {
-            margin: 0;
-        }
-
-        nav {
+        .loading-container {
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            margin: 10px 0;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            padding: 10px 0;
+            align-items: center;
+            height: 80vh;
         }
 
-        nav button {
-            padding: 10px 15px;
-            margin: 5px;
-            background-color: #ff4d4d;
+        .loading-button {
+            background: #ff3333;
             color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        nav button:hover {
-            background-color: #cc0000;
-        }
-
-        .container {
-            max-width: 800px;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            font-size: 1.5rem;
             padding: 20px;
-            margin-top: 20px;
-            display: none; /* Hide all sections initially */
-        }
-
-        .container.active {
-            display: block; /* Show active section */
-        }
-
-        button {
-            padding: 10px 15px;
-            margin: 5px;
-            background-color: #ff4d4d;
-            color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        button:hover {
-            background-color: #cc0000;
+        .loading-button:hover {
+            background: #ff0000;
+            transform: scale(1.1);
         }
 
-        footer {
-            margin-top: auto;
-            padding: 10px;
-            text-align: center;
-            font-size: 14px;
-            color: #777;
-        }
-
-        .loader {
-            border: 8px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 8px solid #ff0000;
+        .loading-symbol {
+            margin-top: 20px;
             width: 50px;
             height: 50px;
-            animation: spin 1s linear infinite;
-            display: none;
+            border: 6px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s infinite linear;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .active {
+            display: flex;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 80%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            background: #ff6666;
+            color: white;
+            text-align: center;
+        }
+
+        input[type="text"]::placeholder, input[type="number"]::placeholder {
+            color: #fff;
+        }
+
+        button {
+            background: #ff4d4d;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+        }
+
+        button:hover {
+            background: #ff0000;
+            transform: scale(1.05);
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            background: #b30000;
+            text-align: center;
+            color: white;
+            width: 100%;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Ellis Cooper Brown is a Sigma</h1>
-    </header>
-    <nav>
-        <button onclick="showPage('photo')">Calorie Estimator</button>
-        <button onclick="showPage('bmi')">BMI Calculator</button>
-    </nav>
-    <div class="container active" id="photo">
-        <h2>Take a Photo of Food</h2>
-        <input type="file" accept="image/*" id="foodPhoto" capture="camera" onchange="uploadPhoto()">
-        <div class="loader" id="loader"></div>
-        <h2>Estimated Calories:</h2>
+
+    <header>Ellis Cooper Brown is a Sigma</header>
+
+    <div class="loading-container" id="loading-container">
+        <button class="loading-button" onclick="enterApp()">Enter the Sigma Zone</button>
+        <div class="loading-symbol"></div>
+    </div>
+
+    <div class="page" id="calorie-tracker-page">
+        <h2 class="section-title">Calorie Tracker</h2>
+        <input type="text" id="foodItem" placeholder="Enter Food Item">
+        <button onclick="estimateCalories()">Estimate Calories</button>
+        <h3>Estimated Calories:</h3>
         <p id="calorieEstimate"></p>
     </div>
-    <div class="container" id="bmi">
-        <h2>BMI Calculator</h2>
-        <input type="number" id="weight" placeholder="Weight (kg)" />
-        <input type="number" id="height" placeholder="Height (m)" />
+
+    <div class="page" id="bmi-calculator-page">
+        <h2 class="section-title">BMI Calculator</h2>
+        <input type="number" id="weight" placeholder="Weight (kg)">
+        <input type="number" id="height" placeholder="Height (m)">
         <button onclick="calculateBMI()">Calculate BMI</button>
         <p id="bmiResult"></p>
     </div>
-    
+
+    <div class="page" id="calorie-tracking-page">
+        <h2 class="section-title">Track Daily Calories</h2>
+        <input type="number" id="calorieInput" placeholder="Enter Calories Consumed Today">
+        <button onclick="addCalories()">Add to Total</button>
+        <p>Total Calories Today: <span id="calorieTotal">0</span></p>
+    </div>
+
     <footer>
-        <p>&copy; 2024 Calorie Tracking AI. All rights reserved.</p>
+        <p>&copy; 2024 Sigma Calorie AI. All rights reserved.</p>
     </footer>
 
     <script>
+        var currentPage = '';
+
+        function enterApp() {
+            document.getElementById('loading-container').style.display = 'none';
+            showPage('calorie-tracker-page');
+        }
+
         function showPage(pageId) {
-            const containers = document.querySelectorAll('.container');
-            containers.forEach(container => container.classList.remove('active'));
+            if (currentPage) {
+                document.getElementById(currentPage).classList.remove('active');
+            }
+            currentPage = pageId;
             document.getElementById(pageId).classList.add('active');
         }
 
-        function uploadPhoto() {
-            var loader = document.getElementById("loader");
-            loader.style.display = "block";
-
-            var photo = document.getElementById("foodPhoto").files[0];
-            var formData = new FormData();
-            formData.append("image", photo);
-            formData.append("api_key", "26a3d04f97dd41f68bab3d124a3dc4b9");
-
-            fetch("https://api.example.com/estimate-calories", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                loader.style.display = "none";
-                if (data.success) {
-                    document.getElementById("calorieEstimate").textContent = "Estimated Calories: " + data.calories + " calories";
-                } else {
-                    document.getElementById("calorieEstimate").textContent = "Error: " + data.message;
-                }
-            })
-            .catch(error => {
-                loader.style.display = "none";
-                document.getElementById("calorieEstimate").textContent = "Error estimating calories. Please try again.";
-                console.error("Error:", error);
-            });
-        }
-
+        // BMI Calculator
         function calculateBMI() {
-            var weight = parseFloat(document.getElementById("weight").value);
-            var height = parseFloat(document.getElementById("height").value);
+            var weight = parseFloat(document.getElementById('weight').value);
+            var height = parseFloat(document.getElementById('height').value);
             if (weight && height) {
                 var bmi = weight / (height * height);
-                document.getElementById("bmiResult").textContent = "Your BMI is " + bmi.toFixed(2);
+                document.getElementById('bmiResult').textContent = "Your BMI is " + bmi.toFixed(2);
             } else {
-                alert("Please enter both weight and height.");
+                document.getElementById('bmiResult').textContent = "Please enter valid weight and height.";
+            }
+        }
+
+        // Calorie Tracker
+        var calorieDatabase = {
+            "apple": 95,
+            "banana": 105,
+            "orange": 62,
+            "chicken": 335,
+            "rice": 206
+        };
+
+        function estimateCalories() {
+            var foodItem = document.getElementById('foodItem').value.toLowerCase();
+            if (calorieDatabase[foodItem]) {
+                var estimatedCalories = calorieDatabase[foodItem];
+                document.getElementById('calorieEstimate').textContent = foodItem + ": " + estimatedCalories + " calories.";
+            } else {
+                document.getElementById('calorieEstimate').textContent = "Food item not found. Try again.";
+            }
+        }
+
+        // Daily Calorie Tracker
+        var calorieTotal = 0;
+        function addCalories() {
+            var calories = parseFloat(document.getElementById('calorieInput').value);
+            if (!isNaN(calories)) {
+                calorieTotal += calories;
+                document.getElementById('calorieTotal').textContent = calorieTotal;
+            } else {
+                alert('Please enter a valid number.');
             }
         }
     </script>
