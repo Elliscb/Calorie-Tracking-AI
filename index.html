@@ -10,10 +10,12 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f4f8;
+            background-color: #ffebee;
             color: #333;
             display: flex;
+            flex-direction: row;
             transition: background-color 0.3s, color 0.3s;
+            overflow: hidden;
         }
 
         body.dark {
@@ -21,86 +23,48 @@
             color: #f0f4f8;
         }
 
-        #sidebar {
+        .sidebar {
             width: 200px;
             background: red;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding-top: 20px;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-
-        #sidebar h2 {
-            color: white;
-            margin-left: 20px;
-        }
-
-        #sidebar a {
-            padding: 15px 20px;
-            display: block;
-            color: white;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-
-        #sidebar a:hover {
-            background: #900;
-        }
-
-        #main {
-            margin-left: 220px;
             padding: 20px;
-            width: calc(100% - 220px);
-            transition: margin-left 0.3s;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
         }
 
-        #landing {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-            background: url('your-background-image-url') no-repeat center center/cover;
-            animation: fadeIn 1s;
+        .sidebar h2 {
+            color: white;
+            text-align: center;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        button {
-            padding: 15px 30px;
-            font-size: 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .sidebar button {
+            display: block;
+            padding: 10px;
+            margin: 10px 0;
             background-color: #c00;
             color: white;
-            font-weight: bold;
-            margin-top: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        button:hover {
+        .sidebar button:hover {
             background-color: #900;
         }
 
         .container {
-            display: none;
-            margin-top: 20px;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            margin-left: 220px;
             padding: 20px;
+            width: calc(100% - 220px);
+            display: none; /* Hide all sections initially */
         }
 
         .container.active {
-            display: block;
+            display: block; /* Show active section */
         }
 
         footer {
@@ -111,57 +75,87 @@
             color: #777;
         }
 
-        /* Add mobile responsiveness */
-        @media (max-width: 768px) {
-            #sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
+        /* Animation styles */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
             }
-            #main {
-                margin-left: 0;
-                width: 100%;
+            40% {
+                transform: translateY(-30px);
             }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .button-animate {
+            animation: bounce 1s;
+        }
+
+        input[type="file"] {
+            margin: 10px 0;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        li {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Style for BMR calculation */
+        .bmr-input {
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-    <div id="sidebar">
-        <h2>Calorie Tracker</h2>
-        <a href="#" onclick="showPage('landing')">Landing</a>
-        <a href="#" onclick="showPage('calorie-estimator')">Calorie Estimator</a>
-        <a href="#" onclick="showPage('bmr-calculator')">BMR Calculator</a>
-        <a href="#" onclick="toggleDarkMode()">Toggle Dark Mode</a>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <button onclick="showPage('landing')">Landing Page</button>
+        <button onclick="showPage('calorie-estimator')">Calorie Estimator</button>
+        <button onclick="showPage('bmr-calculator')">BMR Calculator</button>
+        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </div>
 
-    <div id="main">
-        <div id="landing" class="container active">
-            <h1>Start Your Fitness Journey</h1>
-            <button onclick="startAnimation()">Get Started</button>
-        </div>
+    <div class="container active" id="landing">
+        <h1>Start Your Journey to Better Health</h1>
+        <button onclick="startEatingAnimation()" class="button-animate">Get Started</button>
+    </div>
 
-        <div id="calorie-estimator" class="container">
-            <h2>Calorie Estimator</h2>
-            <input type="file" id="foodImage" accept="image/*" />
-            <button onclick="uploadFoodImage()">Estimate Calories</button>
-            <h2>Estimated Calories:</h2>
-            <p id="calorieEstimate"></p>
-            <h2>Food Log:</h2>
-            <ul id="foodList"></ul>
-        </div>
-        
-        <div id="bmr-calculator" class="container">
-            <h2>BMR Calculator</h2>
+    <div class="container" id="calorie-estimator">
+        <h2>Calorie Estimator</h2>
+        <input type="file" id="foodImage" accept="image/*" />
+        <button onclick="uploadFoodImage()">Estimate Calories</button>
+        <h3>Estimated Calories:</h3>
+        <p id="calorieEstimate"></p>
+        <h3>Food Log:</h3>
+        <ul id="foodList"></ul>
+    </div>
+
+    <div class="container" id="bmr-calculator">
+        <h2>BMR Calculator</h2>
+        <div class="bmr-input">
             <label for="weight">Weight (kg):</label>
-            <input type="number" id="weight" />
-            <label for="height">Height (cm):</label>
-            <input type="number" id="height" />
-            <label for="age">Age (years):</label>
-            <input type="number" id="age" />
-            <button onclick="calculateBMR()">Calculate BMR</button>
-            <h2>Your BMR:</h2>
-            <p id="bmrResult"></p>
+            <input type="number" id="weight" placeholder="Enter weight">
         </div>
+        <div class="bmr-input">
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" placeholder="Enter height">
+        </div>
+        <div class="bmr-input">
+            <label for="age">Age:</label>
+            <input type="number" id="age" placeholder="Enter age">
+        </div>
+        <button onclick="calculateBMR()">Calculate BMR</button>
+        <h3>Your BMR:</h3>
+        <p id="bmrResult"></p>
     </div>
     
     <footer>
@@ -183,10 +177,6 @@
         function toggleDarkMode() {
             darkMode = !darkMode;
             document.body.classList.toggle('dark', darkMode);
-            const sidebarLinks = document.querySelectorAll('#sidebar a');
-            sidebarLinks.forEach(link => {
-                link.style.color = darkMode ? '#f0f4f8' : 'white';
-            });
         }
 
         function uploadFoodImage() {
@@ -201,8 +191,7 @@
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'Authorization': 'Bearer 26a3d04f97dd41f68bab3d124a3dc4b9',
-                        'Content-Type': 'application/json'
+                        'Authorization': 'Bearer 26a3d04f97dd41f68bab3d124a3dc4b9'
                     }
                 })
                 .then(response => response.json())
@@ -221,11 +210,10 @@
             const li = document.createElement('li');
             li.textContent = foodItem;
             foodList.appendChild(li);
-            foodEntries.push(foodItem); // Keep track of food items
-            localStorage.setItem('foodEntries', JSON.stringify(foodEntries)); // Save to local storage
+            foodEntries.push(foodItem);
+            localStorage.setItem('foodEntries', JSON.stringify(foodEntries));
         }
 
-        // Load food log from local storage on page load
         window.onload = function() {
             const savedEntries = JSON.parse(localStorage.getItem('foodEntries'));
             if (savedEntries) {
@@ -234,25 +222,21 @@
             }
         };
 
-        function startAnimation() {
+        function startEatingAnimation() {
             const landing = document.getElementById('landing');
-            landing.innerHTML += '<p>Eating animation here...</p>';
+            landing.classList.add('button-animate');
+            // You can add further animations or transitions here.
             setTimeout(() => {
                 showPage('calorie-estimator');
-            }, 2000); // Wait for animation before going to estimator
+            }, 2000); // Transition after 2 seconds
         }
 
         function calculateBMR() {
-            const weight = parseFloat(document.getElementById('weight').value);
-            const height = parseFloat(document.getElementById('height').value);
-            const age = parseFloat(document.getElementById('age').value);
-
-            if (weight && height && age) {
-                const bmr = 10 * weight + 6.25 * height - 5 * age + 5; // Mifflin-St Jeor Equation for men
-                document.getElementById('bmrResult').innerText = `Your BMR is ${bmr.toFixed(2)} kcal/day`;
-            } else {
-                alert('Please fill in all fields.');
-            }
+            const weight = document.getElementById('weight').value;
+            const height = document.getElementById('height').value;
+            const age = document.getElementById('age').value;
+            const bmr = 10 * weight + 6.25 * height - 5 * age + 5; // Mifflin-St Jeor Equation for men
+            document.getElementById('bmrResult').innerText = bmr.toFixed(2) + ' calories/day';
         }
     </script>
 </body>
