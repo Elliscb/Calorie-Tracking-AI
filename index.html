@@ -10,26 +10,26 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: red; /* Default background color */
+            background-color: #ffcccb; /* Default background color */
             color: #333;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             transition: background-color 0.3s, color 0.3s;
+            overflow: hidden; /* Prevent scrollbars */
         }
 
         body.dark {
-            background-color: #222; /* Dark mode background */
-            color: #f0f4f8; /* Light font color */
+            background-color: #1c1c1c; /* Dark mode background */
+            color: #f0f4f8; /* Light text in dark mode */
         }
 
         header {
-            background: red;
+            background: #ff6347; /* Header color */
             color: white;
             padding: 20px;
             text-align: center;
             width: 100%;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
 
         h1 {
@@ -38,53 +38,46 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        nav {
-            display: flex;
-            justify-content: center;
-            margin: 10px 0;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            padding: 10px 0;
+        .sidebar {
+            width: 200px;
+            background-color: rgba(255, 255, 255, 0.9); /* Light background */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            overflow-y: auto;
         }
 
-        nav button {
-            padding: 10px 20px;
-            margin: 5px;
-            background-color: #c00; /* Change button color */
+        .sidebar button {
+            padding: 15px;
+            margin: 5px 0;
+            background: #ff4500; /* Button color */
             color: white;
             border: none;
-            border-radius: 8px; /* More rounded corners */
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 18px; /* Larger font */
-            transition: background-color 0.3s ease;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        nav button:hover {
-            background-color: #900; /* Darker shade on hover */
+        .sidebar button:hover {
+            background-color: #ff6347; /* Darker button color on hover */
+            transform: scale(1.05);
         }
 
-        /* New styles for the landing page */
-        #landing {
-            background: url('path/to/your/background/image.jpg') no-repeat center center;
-            background-size: cover;
-            color: #fff;
-            padding: 100px 20px;
-            text-align: center;
-        }
-
-        footer {
-            margin-top: auto;
-            padding: 10px;
-            text-align: center;
-            font-size: 14px;
-            color: #777;
+        .content {
+            margin-left: 220px; /* To accommodate the sidebar */
+            padding: 20px;
+            flex-grow: 1;
         }
 
         .container {
             max-width: 800px;
-            background: white;
+            background: rgba(255, 255, 255, 0.9); /* Light background */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             padding: 20px;
@@ -95,6 +88,103 @@
         .container.active {
             display: block; /* Show active section */
         }
+
+        input[type="file"] {
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        li {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+        }
+
+        /* Abstract shapes */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Specific shape styles */
+        .shape1 {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 69, 0, 0.5);
+            top: 10%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .shape2 {
+            width: 150px;
+            height: 150px;
+            background-color: rgba(0, 204, 204, 0.5);
+            top: 50%;
+            right: 30%;
+            animation-delay: 0.5s;
+        }
+
+        .shape3 {
+            width: 120px;
+            height: 120px;
+            background-color: rgba(255, 215, 0, 0.5);
+            top: 70%;
+            left: 40%;
+            animation-delay: 1s;
+        }
+
+        .shape4 {
+            width: 180px;
+            height: 180px;
+            background-color: rgba(75, 0, 130, 0.5);
+            top: 20%;
+            right: 10%;
+            animation-delay: 0.7s;
+        }
+
+        .shape5 {
+            width: 130px;
+            height: 130px;
+            background-color: rgba(0, 128, 0, 0.5);
+            bottom: 10%;
+            left: 30%;
+            animation-delay: 1.2s;
+        }
+
+        .shape6 {
+            width: 160px;
+            height: 160px;
+            background-color: rgba(255, 20, 147, 0.5);
+            bottom: 20%;
+            right: 5%;
+            animation-delay: 1.5s;
+        }
     </style>
 </head>
 <body>
@@ -102,131 +192,142 @@
         <h1>Calorie Tracking AI</h1>
     </header>
 
-    <nav>
-        <button onclick="showPage('landing')">Landing</button>
+    <div class="sidebar">
+        <button onclick="showPage('landing')">Start Here</button>
+        <button onclick="showPage('home')">Home</button>
         <button onclick="showPage('calorie-estimator')">Calorie Estimator</button>
         <button onclick="showPage('bmr-calculator')">BMR Calculator</button>
         <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
-    </nav>
-
-    <div class="container active" id="landing">
-        <h2>Start Your Healthy Journey!</h2>
-        <p>Track your calories with our innovative food image recognition!</p>
     </div>
 
-    <div class="container" id="calorie-estimator">
-        <h2>Calorie Estimator</h2>
-        <input type="file" id="foodImage" accept="image/*" />
-        <button onclick="uploadFoodImage()">Estimate Calories</button>
-        <h2>Estimated Calories:</h2>
-        <p id="calorieEstimate"></p>
-        <h2>Food Log:</h2>
-        <ul id="foodList"></ul>
+    <div class="content">
+        <div class="container active" id="landing">
+            <h2>Your Fitness Journey Begins!</h2>
+            <p>Join us on the path to a healthier lifestyle with innovative calorie tracking.</p>
+            <button onclick="goToHome()">Continue</button>
+            <div class="shape shape1"></div>
+            <div class="shape shape2"></div>
+            <div class="shape shape3"></div>
+            <div class="shape shape4"></div>
+            <div class="shape shape5"></div>
+            <div class="shape shape6"></div>
+        </div>
+
+        <div class="container" id="home">
+            <h2>Welcome to Calorie Tracking AI</h2>
+            <p>Your go-to platform for tracking calories through food images!</p>
+            <div class="shape shape1"></div>
+            <div class="shape shape2"></div>
+            <div class="shape shape3"></div>
+            <div class="shape shape4"></div>
+            <div class="shape shape5"></div>
+            <div class="shape shape6"></div>
+        </div>
+
+        <div class="container" id="calorie-estimator">
+            <h2>Calorie Estimator</h2>
+            <input type="file" id="foodImage" accept="image/*" />
+            <button onclick="uploadFoodImage()">Estimate Calories</button>
+            <h2>Estimated Calories:</h2>
+            <p id="calorieEstimate"></p>
+            <h2>Food Log:</h2>
+            <ul id="foodList"></ul>
+            <div class="shape shape1"></div>
+            <div class="shape shape2"></div>
+            <div class="shape shape3"></div>
+            <div class="shape shape4"></div>
+            <div class="shape shape5"></div>
+            <div class="shape shape6"></div>
+        </div>
+
+        <div class="container" id="bmr-calculator">
+            <h2>BMR Calculator</h2>
+            <p>Calculate your Basal Metabolic Rate:</p>
+            <input type="number" id="weight" placeholder="Weight (kg)" />
+            <input type="number" id="height" placeholder="Height (cm)" />
+            <input type="number" id="age" placeholder="Age (years)" />
+            <select id="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <button onclick="calculateBMR()">Calculate BMR</button>
+            <p>Your BMR: <span id="bmrResult"></span></p>
+            <div class="shape shape1"></div>
+            <div class="shape shape2"></div>
+            <div class="shape shape3"></div>
+            <div class="shape shape4"></div>
+            <div class="shape shape5"></div>
+            <div class="shape shape6"></div>
+        </div>
     </div>
 
-    <div class="container" id="bmr-calculator">
-        <h2>BMR Calculator</h2>
-        <p>Calculate your Basal Metabolic Rate here.</p>
-        <!-- BMR calculation form will go here -->
-    </div>
-    
     <footer>
-        &copy; 2024 Calorie Tracking AI. All rights reserved.
+        <p>&copy; 2024 Calorie Tracking AI. All rights reserved.</p>
     </footer>
 
     <script>
-        let accessToken = '';
-        let darkMode = false;
-        let foodEntries = [];
-
-        async function fetchAccessToken() {
-            const tokenUrl = 'https://platform.fatsecret.com/rest/token';
-            const credentials = {
-                client_id: '735c89eaf27e473baf5589c77fdd3cee', // Your Consumer Key
-                client_secret: 'c337b8543fe44ee686b105e3d8004ae5', // Your Consumer Secret
-                grant_type: 'client_credentials'
-            };
-
-            const response = await fetch(tokenUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams(credentials)
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                accessToken = data.access_token; // Save the access token for future requests
-            } else {
-                console.error('Failed to fetch access token');
-            }
-        }
-
-        async function uploadFoodImage() {
-            const fileInput = document.getElementById('foodImage');
-            const file = fileInput.files[0];
-            
-            if (file) {
-                const formData = new FormData();
-                formData.append('file', file);
-
-                const apiUrl = 'https://platform.fatsecret.com/rest/server.api'; // Base URL
-                const params = {
-                    method: 'food.get.v4',
-                    food_id: '33691', // Example food ID (you'll need to adjust based on your needs)
-                    format: 'json'
-                };
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`, // Use the obtained access token
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(params)
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    document.getElementById('calorieEstimate').innerText = `${data.food.food_name} contains ${data.food.calories} calories`;
-                    addToFoodList(data.food.food_name);
-                } else {
-                    console.error('Failed to estimate calories');
-                }
-            }
-        }
-
-        function showPage(page) {
-            const containers = document.querySelectorAll('.container');
-            containers.forEach(container => {
+        function showPage(pageId) {
+            document.querySelectorAll('.container').forEach(container => {
                 container.classList.remove('active');
             });
-            document.getElementById(page).classList.add('active');
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function goToHome() {
+            showPage('home');
         }
 
         function toggleDarkMode() {
-            darkMode = !darkMode;
-            document.body.classList.toggle('dark', darkMode);
+            document.body.classList.toggle('dark');
         }
 
-        window.onload = async function() {
-            await fetchAccessToken(); // Fetch access token on page load
-
-            const savedEntries = JSON.parse(localStorage.getItem('foodEntries'));
-            if (savedEntries) {
-                foodEntries = savedEntries;
-                foodEntries.forEach(addToFoodList);
+        function uploadFoodImage() {
+            const fileInput = document.getElementById('foodImage');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select an image.');
+                return;
             }
-        };
 
-        function addToFoodList(foodItem) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('YOUR_API_URL_HERE', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('calorieEstimate').innerText = data.calories || 'Estimation not available.';
+                logFood(file.name, data.calories);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('calorieEstimate').innerText = 'Error estimating calories.';
+            });
+        }
+
+        function logFood(foodName, calories) {
             const foodList = document.getElementById('foodList');
             const li = document.createElement('li');
-            li.textContent = foodItem;
+            li.textContent = `${foodName}: ${calories} calories`;
             foodList.appendChild(li);
-            foodEntries.push(foodItem);
-            localStorage.setItem('foodEntries', JSON.stringify(foodEntries));
+        }
+
+        function calculateBMR() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+
+            let bmr;
+            if (gender === 'male') {
+                bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+            } else {
+                bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+            }
+
+            document.getElementById('bmrResult').innerText = bmr.toFixed(2);
         }
     </script>
 </body>
