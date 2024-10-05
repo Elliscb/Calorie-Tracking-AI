@@ -73,10 +73,49 @@
                     content.innerHTML = "<h2>Welcome to Your Fitness App!</h2><p>This is your hub for tracking calories and calculating your BMR.</p>";
                     break;
                 case 'calorie-estimator':
-                    content.innerHTML = "<h2>Calorie Estimator Page</h2><p>Estimate your daily caloric needs here.</p>";
+                    content.innerHTML = `
+                        <h2>Calorie Estimator</h2>
+                        <form id="calorieForm">
+                            <label for="weight">Weight (kg):</label>
+                            <input type="number" id="weight" required>
+                            <label for="height">Height (cm):</label>
+                            <input type="number" id="height" required>
+                            <label for="age">Age:</label>
+                            <input type="number" id="age" required>
+                            <label for="activityLevel">Activity Level:</label>
+                            <select id="activityLevel">
+                                <option value="1.2">Sedentary</option>
+                                <option value="1.375">Lightly active</option>
+                                <option value="1.55">Moderately active</option>
+                                <option value="1.725">Very active</option>
+                                <option value="1.9">Super active</option>
+                            </select>
+                            <button type="submit">Calculate Calories</button>
+                        </form>
+                        <p id="calorieResult"></p>
+                    `;
+                    document.getElementById("calorieForm").addEventListener("submit", calculateCalories);
                     break;
                 case 'bmr-calculator':
-                    content.innerHTML = "<h2>BMR Calculator Page</h2><p>Calculate your Basal Metabolic Rate.</p>";
+                    content.innerHTML = `
+                        <h2>BMR Calculator</h2>
+                        <form id="bmrForm">
+                            <label for="bmrWeight">Weight (kg):</label>
+                            <input type="number" id="bmrWeight" required>
+                            <label for="bmrHeight">Height (cm):</label>
+                            <input type="number" id="bmrHeight" required>
+                            <label for="bmrAge">Age:</label>
+                            <input type="number" id="bmrAge" required>
+                            <label for="gender">Gender:</label>
+                            <select id="gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            <button type="submit">Calculate BMR</button>
+                        </form>
+                        <p id="bmrResult"></p>
+                    `;
+                    document.getElementById("bmrForm").addEventListener("submit", calculateBMR);
                     break;
                 case 'about':
                     content.innerHTML = "<h2>About This App</h2><p>This app helps you manage your fitness journey.</p>";
@@ -84,6 +123,37 @@
                 default:
                     content.innerHTML = "<h2>Page Not Found</h2>";
             }
+        }
+
+        function calculateCalories(event) {
+            event.preventDefault();
+            const weight = parseFloat(document.getElementById("weight").value);
+            const height = parseFloat(document.getElementById("height").value);
+            const age = parseInt(document.getElementById("age").value);
+            const activityLevel = parseFloat(document.getElementById("activityLevel").value);
+
+            // Using Mifflin-St Jeor Equation to calculate TDEE
+            const tdee = (10 * weight) + (6.25 * height) - (5 * age) + 5; // For males
+            const caloriesNeeded = tdee * activityLevel;
+
+            document.getElementById("calorieResult").innerText = `Your estimated daily calorie needs are: ${Math.round(caloriesNeeded)} calories.`;
+        }
+
+        function calculateBMR(event) {
+            event.preventDefault();
+            const weight = parseFloat(document.getElementById("bmrWeight").value);
+            const height = parseFloat(document.getElementById("bmrHeight").value);
+            const age = parseInt(document.getElementById("bmrAge").value);
+            const gender = document.getElementById("gender").value;
+
+            let bmr;
+            if (gender === 'male') {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+            } else {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+            }
+
+            document.getElementById("bmrResult").innerText = `Your BMR is: ${Math.round(bmr)} calories.`;
         }
     </script>
     <style>
