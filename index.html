@@ -3,251 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calorie Tracking AI</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Fitness App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div id="landing" class="landing-page">
+        <div class="animation-container">
+            <!-- Here we can put a canvas for an eating animation -->
+            <canvas id="animationCanvas"></canvas>
+            <div class="landing-content">
+                <h1>Kickstart Your Fitness Journey</h1>
+                <button id="startButton" class="animated-button">Get Started</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <button onclick="navigate('home')">Home</button>
+        <button onclick="navigate('calorie-estimator')">Calorie Estimator</button>
+        <button onclick="navigate('bmr-calculator')">BMR Calculator</button>
+        <button onclick="navigate('about')">About</button>
+    </nav>
+
+    <div id="content" class="content">
+        <!-- Main content will be injected here -->
+    </div>
+
+    <script>
+        const canvas = document.getElementById("animationCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Simple eating animation
+        function animateEating() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "red"; // Food color
+            ctx.beginPath();
+            ctx.arc(50, 50, 30, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Animate eating
+            gsap.to({ y: 50 }, {
+                y: 0,
+                duration: 1,
+                onUpdate: function() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = "red";
+                    ctx.beginPath();
+                    ctx.arc(50, this.targets()[0].y, 30, 0, Math.PI * 2);
+                    ctx.fill();
+                },
+                onComplete: function() {
+                    alert("Let's Get Started!");
+                    navigate('home'); // Navigate to home after eating
+                }
+            });
+        }
+
+        document.getElementById("startButton").addEventListener("click", animateEating);
+
+        function navigate(page) {
+            const content = document.getElementById("content");
+            if (page === 'home') {
+                content.innerHTML = "<h2>Welcome to Your Fitness App!</h2>";
+            } else if (page === 'calorie-estimator') {
+                content.innerHTML = "<h2>Calorie Estimator Page</h2>";
+            } else if (page === 'bmr-calculator') {
+                content.innerHTML = "<h2>BMR Calculator Page</h2>";
+            } else if (page === 'about') {
+                content.innerHTML = "<h2>About This App</h2>";
+            }
+        }
+    </script>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            transition: background-color 0.3s, color 0.3s;
-            overflow: hidden;
-        }
-
-        body.dark {
-            background-color: #333;
-            color: #f0f4f8;
-        }
-
-        .sidebar {
-            width: 250px;
-            background: red;
-            height: 100%;
-            position: fixed;
-            left: 0;
-            top: 0;
-            transition: transform 0.3s;
-            transform: translateX(-100%);
-            z-index: 100;
-        }
-
-        .sidebar.active {
-            transform: translateX(0);
-        }
-
-        .sidebar button {
-            padding: 15px;
-            margin: 10px;
-            background-color: #c00;
+            font-family: Arial, sans-serif;
+            background-color: #f44336; /* Red background */
             color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .sidebar button:hover {
-            background-color: #900;
-            transform: scale(1.05);
         }
 
         .landing-page {
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
-            width: 100%;
             height: 100vh;
-            background: url('your-background-image.jpg') no-repeat center center/cover;
             position: relative;
+            overflow: hidden;
+        }
+
+        .animation-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #animationCanvas {
+            width: 100px;
+            height: 100px;
+        }
+
+        .landing-content {
+            position: absolute;
+            text-align: center;
+        }
+
+        .animated-button {
+            background-color: #ff5722; /* Bright button color */
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 5px;
             transition: background-color 0.3s;
         }
 
-        .landing-page h1 {
-            font-size: 3rem;
-            text-align: center;
-            margin: 20px;
-            color: white;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        .animated-button:hover {
+            background-color: #e64a19;
         }
 
-        .start-button {
-            padding: 15px 30px;
-            font-size: 18px;
-            color: white;
-            background-color: rgba(255, 0, 0, 0.8);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            animation: bounce 1s infinite;
-        }
-
-        .start-button:hover {
-            background-color: rgba(200, 0, 0, 0.9);
-            transform: scale(1.05);
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .container {
-            max-width: 800px;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            background-color: rgba(255, 87, 34, 0.9);
+            display: flex;
+            flex-direction: column;
             padding: 20px;
-            margin: 20px auto;
-            display: none; /* Hide all sections initially */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
         }
 
-        .container.active {
-            display: block; /* Show active section */
-        }
-
-        footer {
-            margin-top: auto;
+        .sidebar button {
+            background-color: transparent;
+            border: none;
+            color: white;
             padding: 10px;
-            text-align: center;
-            font-size: 14px;
-            color: #777;
+            text-align: left;
+            cursor: pointer;
+            font-size: 18px;
+            margin: 5px 0;
+            transition: background-color 0.3s;
         }
 
-        /* Animations */
-        .fade-in {
-            animation: fadeIn 0.5s forwards;
+        .sidebar button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
+        .content {
+            margin-left: 220px; /* Sidebar width */
+            padding: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
             }
-            to {
-                opacity: 1;
+
+            .content {
+                margin-left: 0; /* No margin for mobile */
+            }
+
+            #animationCanvas {
+                width: 80px;
+                height: 80px;
             }
         }
     </style>
-</head>
-<body>
-    <div class="sidebar" id="sidebar">
-        <button onclick="showPage('calorie-estimator')">Calorie Estimator</button>
-        <button onclick="showPage('bmr-calculator')">BMR Calculator</button>
-        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
-        <button onclick="toggleSidebar()">Close</button>
-    </div>
-
-    <div class="landing-page fade-in">
-        <h1>Start Your Healthy Journey!</h1>
-        <button class="start-button" onclick="startApp()">Get Started</button>
-    </div>
-
-    <div class="container" id="calorie-estimator">
-        <h2>Calorie Estimator</h2>
-        <input type="file" id="foodImage" accept="image/*" />
-        <button onclick="uploadFoodImage()">Estimate Calories</button>
-        <h2>Estimated Calories:</h2>
-        <p id="calorieEstimate"></p>
-        <h2>Food Log:</h2>
-        <ul id="foodList"></ul>
-    </div>
-
-    <div class="container" id="bmr-calculator">
-        <h2>BMR Calculator</h2>
-        <!-- Add BMR calculator functionality here -->
-    </div>
-    
-    <footer>
-        &copy; 2024 Calorie Tracking AI. All rights reserved.
-    </footer>
-
-    <script>
-        let darkMode = false;
-        let foodEntries = [];
-
-        function startApp() {
-            document.querySelector('.landing-page').style.display = 'none';
-            document.getElementById('sidebar').classList.add('active');
-            showPage('calorie-estimator');
-        }
-
-        function showPage(page) {
-            const containers = document.querySelectorAll('.container');
-            containers.forEach(container => {
-                container.classList.remove('active');
-            });
-            document.getElementById(page).classList.add('active');
-        }
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('active');
-        }
-
-        function toggleDarkMode() {
-            darkMode = !darkMode;
-            document.body.classList.toggle('dark', darkMode);
-            document.querySelectorAll('.sidebar button').forEach(button => {
-                button.style.color = darkMode ? '#f0f4f8' : '#333';
-            });
-        }
-
-        function uploadFoodImage() {
-            const fileInput = document.getElementById('foodImage');
-            const file = fileInput.files[0];
-            if (file) {
-                const formData = new FormData();
-                formData.append('file', file);
-
-                // API call for calorie estimation
-                fetch('https://platform.fatsecret.com/rest/server.api', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        method: 'food.get.v4',
-                        food_id: '33691', // Replace with the dynamic food_id based on your API
-                        format: 'json'
-                    }),
-                    headers: {
-                        'Authorization': 'Bearer 26a3d04f97dd41f68bab3d124a3dc4b9',
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('calorieEstimate').innerText = `${data.calories} calories`;
-                    addToFoodList(data.food);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            }
-        }
-
-        function addToFoodList(foodItem) {
-            const foodList = document.getElementById('foodList');
-            const li = document.createElement('li');
-            li.textContent = foodItem;
-            foodList.appendChild(li);
-            foodEntries.push(foodItem);
-            localStorage.setItem('foodEntries', JSON.stringify(foodEntries));
-        }
-
-        window.onload = function() {
-            const savedEntries = JSON.parse(localStorage.getItem('foodEntries'));
-            if (savedEntries) {
-                foodEntries = savedEntries;
-                foodEntries.forEach(addToFoodList);
-            }
-        };
-    </script>
 </body>
-</html>
+</html>o
