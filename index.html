@@ -11,7 +11,6 @@
 <body>
     <div id="landing" class="landing-page">
         <div class="animation-container">
-            <!-- Here we can put a canvas for an eating animation -->
             <canvas id="animationCanvas"></canvas>
             <div class="landing-content">
                 <h1>Kickstart Your Fitness Journey</h1>
@@ -20,20 +19,22 @@
         </div>
     </div>
 
-    <nav class="sidebar" id="sidebar">
+    <nav class="sidebar" id="sidebar" style="display: none;">
         <button onclick="navigate('home')">Home</button>
         <button onclick="navigate('calorie-estimator')">Calorie Estimator</button>
         <button onclick="navigate('bmr-calculator')">BMR Calculator</button>
         <button onclick="navigate('about')">About</button>
     </nav>
 
-    <div id="content" class="content">
+    <div id="content" class="content" style="display: none;">
         <!-- Main content will be injected here -->
     </div>
 
     <script>
         const canvas = document.getElementById("animationCanvas");
         const ctx = canvas.getContext("2d");
+        canvas.width = 100;
+        canvas.height = 100;
 
         // Simple eating animation
         function animateEating() {
@@ -56,7 +57,10 @@
                 },
                 onComplete: function() {
                     alert("Let's Get Started!");
-                    navigate('home'); // Navigate to home after eating
+                    document.getElementById("landing").style.display = "none"; // Hide landing
+                    document.getElementById("sidebar").style.display = "flex"; // Show sidebar
+                    document.getElementById("content").style.display = "block"; // Show content
+                    navigate('home'); // Load home page content
                 }
             });
         }
@@ -65,14 +69,21 @@
 
         function navigate(page) {
             const content = document.getElementById("content");
-            if (page === 'home') {
-                content.innerHTML = "<h2>Welcome to Your Fitness App!</h2>";
-            } else if (page === 'calorie-estimator') {
-                content.innerHTML = "<h2>Calorie Estimator Page</h2>";
-            } else if (page === 'bmr-calculator') {
-                content.innerHTML = "<h2>BMR Calculator Page</h2>";
-            } else if (page === 'about') {
-                content.innerHTML = "<h2>About This App</h2>";
+            switch(page) {
+                case 'home':
+                    content.innerHTML = "<h2>Welcome to Your Fitness App!</h2><p>This is your hub for tracking calories and calculating your BMR.</p>";
+                    break;
+                case 'calorie-estimator':
+                    content.innerHTML = "<h2>Calorie Estimator Page</h2><p>Estimate your daily caloric needs here.</p>";
+                    break;
+                case 'bmr-calculator':
+                    content.innerHTML = "<h2>BMR Calculator Page</h2><p>Calculate your Basal Metabolic Rate.</p>";
+                    break;
+                case 'about':
+                    content.innerHTML = "<h2>About This App</h2><p>This app helps you manage your fitness journey.</p>";
+                    break;
+                default:
+                    content.innerHTML = "<h2>Page Not Found</h2>";
             }
         }
     </script>
@@ -180,4 +191,4 @@
         }
     </style>
 </body>
-</html>o
+</html>
