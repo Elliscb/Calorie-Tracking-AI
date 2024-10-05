@@ -3,244 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calorie Tracking AI</title>
+    <title>Ellis Cooper Brown's Calorie Tracking</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #ff4d4d, #ff1a1a);
+            background-color: #330000; /* Deep red */
             color: white;
+            font-family: 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        header {
-            position: relative;
-            background: #b30000;
-            color: white;
-            padding: 30px;
-            text-align: center;
-            width: 100%;
-            font-size: 2.5rem;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            text-shadow: 2px 2px 5px #000;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 150%;
-            height: 100%;
-            background: rgba(255, 0, 0, 0.5);
-            filter: blur(60px);
-            z-index: -1;
-            transform: translate(-50%, -50%);
-        }
-
-        .loading-container {
-            display: flex;
-            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            height: 80vh;
         }
 
-        .loading-button {
-            background: #ff3333;
-            color: white;
-            font-size: 1.5rem;
-            padding: 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .loading-button:hover {
-            background: #ff0000;
-            transform: scale(1.1);
-        }
-
-        .loading-symbol {
-            margin-top: 20px;
-            width: 50px;
-            height: 50px;
-            border: 6px solid #fff;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s infinite linear;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .page {
-            display: none;
+        .load-in {
+            display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            justify-content: center;
+            height: 100vh;
         }
 
-        .active {
-            display: flex;
+        h1 {
+            font-size: 48px;
+            text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.7);
+            animation: glow 1.5s ease-in-out infinite alternate;
         }
 
-        .section-title {
-            font-size: 2rem;
-            color: white;
-            margin-bottom: 20px;
+        @keyframes glow {
+            from {
+                text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.7);
+            }
+            to {
+                text-shadow: 2px 2px 20px rgba(255, 50, 50, 1);
+            }
         }
 
-        input[type="text"], input[type="number"] {
-            width: 80%;
-            padding: 15px;
-            margin: 10px 0;
+        .load-btn {
+            padding: 15px 30px;
+            background-color: #660000; /* Darker red */
             border: none;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            background: #ff6666;
+            border-radius: 10px;
+            font-size: 20px;
             color: white;
-            text-align: center;
-        }
-
-        input[type="text"]::placeholder, input[type="number"]::placeholder {
-            color: #fff;
-        }
-
-        button {
-            background: #ff4d4d;
-            color: white;
-            padding: 15px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 20px 0;
         }
 
-        button:hover {
-            background: #ff0000;
+        .load-btn:hover {
+            background-color: #990000; /* Lighter red */
             transform: scale(1.05);
         }
 
-        footer {
-            margin-top: auto;
-            padding: 20px;
-            background: #b30000;
-            text-align: center;
-            color: white;
-            width: 100%;
+        .main-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
         }
 
-        .hidden {
-            display: none;
+        nav {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+            gap: 10px;
+        }
+
+        nav button {
+            padding: 10px 20px;
+            background-color: #660000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav button:hover {
+            background-color: #990000;
+        }
+
+        /* Style sections for each feature */
+        .container {
+            background-color: #440000;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            margin: 10px 0;
+        }
+
+        input, button, textarea {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .feedback-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Loading animation */
+        .loading-spinner {
+            border: 6px solid rgba(255, 255, 255, 0.1);
+            border-top: 6px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 <body>
 
-    <header>Ellis Cooper Brown is a Sigma</header>
-
-    <div class="loading-container" id="loading-container">
-        <button class="loading-button" onclick="enterApp()">Enter the Sigma Zone</button>
-        <div class="loading-symbol"></div>
+    <!-- Load-In Screen -->
+    <div class="load-in">
+        <h1>Ellis Cooper Brown is a Sigma</h1>
+        <button class="load-btn" onclick="startApp()">Start</button>
     </div>
 
-    <div class="page" id="calorie-tracker-page">
-        <h2 class="section-title">Calorie Tracker</h2>
-        <input type="text" id="foodItem" placeholder="Enter Food Item">
-        <button onclick="estimateCalories()">Estimate Calories</button>
-        <h3>Estimated Calories:</h3>
-        <p id="calorieEstimate"></p>
-    </div>
+    <!-- Main App Section -->
+    <div class="main-container" id="mainApp">
+        <nav>
+            <button onclick="showPage('photo-calorie')">AI Photo Calorie Estimator</button>
+            <button onclick="showPage('bmi')">BMI Calculator</button>
+            <button onclick="showPage('calorie-tracker')">Daily Calorie Tracker</button>
+            <button onclick="showPage('metabolic-rate')">Metabolic Rate Calculator</button>
+        </nav>
 
-    <div class="page" id="bmi-calculator-page">
-        <h2 class="section-title">BMI Calculator</h2>
-        <input type="number" id="weight" placeholder="Weight (kg)">
-        <input type="number" id="height" placeholder="Height (m)">
-        <button onclick="calculateBMI()">Calculate BMI</button>
-        <p id="bmiResult"></p>
-    </div>
+        <!-- AI Photo Calorie Estimator -->
+        <div class="container" id="photo-calorie">
+            <h2>AI Calorie Estimator</h2>
+            <input type="file" id="foodPhoto" accept="image/*">
+            <button onclick="estimateCalories()">Estimate Calories</button>
+            <div id="calorieResult">Estimated calories will appear here.</div>
+            <div class="loading-spinner" id="loadingSpinner" style="display: none;"></div>
+        </div>
 
-    <div class="page" id="calorie-tracking-page">
-        <h2 class="section-title">Track Daily Calories</h2>
-        <input type="number" id="calorieInput" placeholder="Enter Calories Consumed Today">
-        <button onclick="addCalories()">Add to Total</button>
-        <p>Total Calories Today: <span id="calorieTotal">0</span></p>
-    </div>
+        <!-- BMI Calculator -->
+        <div class="container" id="bmi" style="display: none;">
+            <h2>BMI Calculator</h2>
+            <input type="number" id="weight" placeholder="Weight (kg)" />
+            <input type="number" id="height" placeholder="Height (m)" />
+            <button onclick="calculateBMI()">Calculate BMI</button>
+            <p id="bmiResult"></p>
+        </div>
 
-    <footer>
-        <p>&copy; 2024 Sigma Calorie AI. All rights reserved.</p>
-    </footer>
+        <!-- Daily Calorie Tracker -->
+        <div class="container" id="calorie-tracker" style="display: none;">
+            <h2>Daily Calorie Tracker</h2>
+            <textarea id="calorieInput" placeholder="Enter your food and calorie count..."></textarea>
+            <button onclick="addCalories()">Track Calories</button>
+            <ul id="calorieList"></ul>
+        </div>
+
+        <!-- Metabolic Rate Calculator -->
+        <div class="container" id="metabolic-rate" style="display: none;">
+            <h2>Metabolic Rate Calculator</h2>
+            <p>Calculate your BMR based on your stats.</p>
+            <!-- Add BMR calculator code here -->
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <h3>Feedback</h3>
+            <textarea id="feedback" placeholder="Leave your feedback here..."></textarea>
+            <button onclick="submitFeedback()">Submit Feedback</button>
+        </div>
+    </div>
 
     <script>
-        var currentPage = '';
-
-        function enterApp() {
-            document.getElementById('loading-container').style.display = 'none';
-            showPage('calorie-tracker-page');
+        // Load-In Button Functionality
+        function startApp() {
+            document.querySelector('.load-in').style.display = 'none';
+            document.querySelector('.main-container').style.display = 'flex';
         }
 
+        // Navigation between pages
         function showPage(pageId) {
-            if (currentPage) {
-                document.getElementById(currentPage).classList.remove('active');
-            }
-            currentPage = pageId;
-            document.getElementById(pageId).classList.add('active');
+            const pages = document.querySelectorAll('.container');
+            pages.forEach(page => page.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+        }
+
+        // Placeholder for AI Calorie Estimation
+        function estimateCalories() {
+            const spinner = document.getElementById('loadingSpinner');
+            spinner.style.display = 'block';
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                document.getElementById('calorieResult').textContent = "Estimated calories: 250 kcal (Sample)";
+            }, 2000);
         }
 
         // BMI Calculator
         function calculateBMI() {
-            var weight = parseFloat(document.getElementById('weight').value);
-            var height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
             if (weight && height) {
-                var bmi = weight / (height * height);
+                const bmi = weight / (height * height);
                 document.getElementById('bmiResult').textContent = "Your BMI is " + bmi.toFixed(2);
             } else {
-                document.getElementById('bmiResult').textContent = "Please enter valid weight and height.";
-            }
-        }
-
-        // Calorie Tracker
-        var calorieDatabase = {
-            "apple": 95,
-            "banana": 105,
-            "orange": 62,
-            "chicken": 335,
-            "rice": 206
-        };
-
-        function estimateCalories() {
-            var foodItem = document.getElementById('foodItem').value.toLowerCase();
-            if (calorieDatabase[foodItem]) {
-                var estimatedCalories = calorieDatabase[foodItem];
-                document.getElementById('calorieEstimate').textContent = foodItem + ": " + estimatedCalories + " calories.";
-            } else {
-                document.getElementById('calorieEstimate').textContent = "Food item not found. Try again.";
+                alert("Please enter valid weight and height.");
             }
         }
 
         // Daily Calorie Tracker
-        var calorieTotal = 0;
         function addCalories() {
-            var calories = parseFloat(document.getElementById('calorieInput').value);
-            if (!isNaN(calories)) {
-                calorieTotal += calories;
-                document.getElementById('calorieTotal').textContent = calorieTotal;
+            const input = document.getElementById('calorieInput').value;
+            if (input) {
+                const list = document.getElementById('calorieList');
+                const newItem = document.createElement('li');
+                newItem.textContent = input;
+                list.appendChild(newItem);
+                document.getElementById('calorieInput').value = '';
+            }
+        }
+
+        // Feedback Submission
+        function submitFeedback() {
+            const feedback = document.getElementById('feedback').value;
+            if (feedback) {
+                alert('Thank you for your feedback!');
+                document.getElementById('feedback').value = '';
             } else {
-                alert('Please enter a valid number.');
+                alert('Please write something before submitting.');
             }
         }
     </script>
+
 </body>
 </html>
