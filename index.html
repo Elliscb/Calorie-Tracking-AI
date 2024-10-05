@@ -14,7 +14,6 @@
             <li><a href="#landing" class="menu-item">Landing</a></li>
             <li><a href="#calorie-estimator" class="menu-item">Calorie Estimator</a></li>
             <li><a href="#bmr-calculator" class="menu-item">BMR Calculator</a></li>
-            <li><a href="#photo-estimator" class="menu-item">Photo Estimator</a></li>
         </ul>
     </div>
     
@@ -41,13 +40,6 @@
             <input type="number" id="age" placeholder="Age">
             <button id="calculate-bmr">Calculate BMR</button>
             <div id="bmr-result"></div>
-        </div>
-
-        <div id="photo-estimator" class="page" style="display: none;">
-            <h2>Photo Calorie Estimator</h2>
-            <input type="file" id="photo-input">
-            <button id="photo-estimate-button">Estimate from Photo</button>
-            <div id="photo-result"></div>
         </div>
     </div>
 
@@ -127,11 +119,6 @@
                 const bmr = 10 * weight + 6.25 * height - 5 * age + 5; // Mifflin-St Jeor Equation for men
                 $('#bmr-result').text(`Your BMR is: ${bmr.toFixed(2)} calories/day`);
             });
-
-            $('#photo-estimate-button').on('click', function() {
-                // Placeholder for photo estimation logic
-                $('#photo-result').text('Photo estimation feature not implemented yet.');
-            });
         });
     </script>
     <style>
@@ -175,7 +162,7 @@
             background-color: #e64a19;
             transform: scale(1.05);
         }
-        input[type="text"], input[type="number"], input[type="file"] {
+        input[type="text"], input[type="number"] {
             display: block;
             width: calc(100% - 40px);
             margin: 10px auto;
