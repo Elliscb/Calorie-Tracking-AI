@@ -178,14 +178,24 @@
         <h1>Ellis Cooper Brown is a Sigma</h1>
     </header>
     <nav>
+        <button onclick="showPage('home')">Home</button>
         <button onclick="showPage('tracker')">Calorie Tracker</button>
         <button onclick="showPage('bmi')">BMI Calculator</button>
         <button onclick="showPage('bmr')">BMR Calculator</button>
         <button onclick="showPage('education')">Nutrition & Fitness</button>
         <button onclick="showPage('forum')">Forums</button>
-        <button id="darkModeToggle">Toggle Dark Mode</button>
+        <button onclick="showPage('feedback')">Feedback</button>
+        <button id="darkModeToggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </nav>
-    <div class="container active" id="tracker">
+
+    <!-- Home Page -->
+    <div class="container active" id="home">
+        <h2>Welcome to the Calorie Tracking AI</h2>
+        <p>Your personal assistant for tracking calories, managing your diet, and achieving your fitness goals.</p>
+    </div>
+
+    <!-- Calorie Tracker Page -->
+    <div class="container" id="tracker">
         <h2>Calorie Detector</h2>
         <input type="file" id="foodImage" accept="image/*" />
         <button onclick="uploadFoodImage()">Upload Food Photo</button>
@@ -197,6 +207,8 @@
         <input type="number" id="calorieGoal" placeholder="Calories Goal (kcal)" />
         <button onclick="setCalorieGoal()">Set Goal</button>
     </div>
+
+    <!-- BMI Calculator Page -->
     <div class="container" id="bmi">
         <h2>BMI Calculator</h2>
         <input type="number" id="weight" placeholder="Weight (kg)" />
@@ -204,6 +216,8 @@
         <button onclick="calculateBMI()">Calculate BMI</button>
         <p id="bmiResult"></p>
     </div>
+
+    <!-- BMR Calculator Page -->
     <div class="container" id="bmr">
         <h2>BMR Calculator</h2>
         <input type="number" id="age" placeholder="Age (years)" />
@@ -212,115 +226,109 @@
         <button onclick="calculateBMR()">Calculate BMR</button>
         <p id="bmrResult"></p>
     </div>
+
+    <!-- Educational Content Page -->
     <div class="container" id="education">
-        <h2>Nutrition & Fitness Education</h2>
-        <p>Welcome to the educational section! Here you'll find articles, tips, and real-life stories about nutrition, healthy eating, and fitness.</p>
-        <ul>
-            <li><strong>Healthy Eating Tips</strong>: Learn how to maintain a balanced diet.</li>
-            <li><strong>Fitness Stories</strong>: Read inspiring stories from people who transformed their lives.</li>
-            <li><strong>Nutrition Basics</strong>: Understand the importance of macronutrients.</li>
-        </ul>
+        <h2>Nutrition & Fitness</h2>
+        <p>Explore articles on healthy eating, fitness tips, and real-life success stories.</p>
+        <!-- You can add links or articles here -->
     </div>
+
+    <!-- Forum Page -->
     <div class="container" id="forum">
         <h2>Forums</h2>
-        <p>Join the community discussions here!</p>
-        <ul id="forumList">
-            <li>General Nutrition</li>
-            <li>Fitness Tips</li>
-            <li>Weight Loss Stories</li>
-        </ul>
+        <p>A community space to discuss topics, share tips, and support each other.</p>
+        <!-- You can add forum functionality here -->
+    </div>
+
+    <!-- Feedback Page -->
+    <div class="container" id="feedback">
+        <h2>Feedback</h2>
+        <textarea id="feedbackText" rows="5" placeholder="Share your thoughts..."></textarea>
+        <button onclick="submitFeedback()">Submit Feedback</button>
     </div>
 
     <footer>
-        <p>&copy; 2024 Calorie Tracking AI. All rights reserved.</p>
+        <p>&copy; 2024 Ellis Cooper Brown</p>
     </footer>
 
     <script>
-        var foodEntries = [];
-        var calorieGoal = 0;
-        const apiKey = "26a3d04f97dd41f68bab3d124a3dc4b9"; // Your API key
+        let darkMode = false;
 
-        function showPage(pageId) {
+        function showPage(page) {
             const containers = document.querySelectorAll('.container');
-            containers.forEach(container => container.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
+            containers.forEach(container => {
+                container.classList.remove('active');
+            });
+            document.getElementById(page).classList.add('active');
         }
 
-        async function uploadFoodImage() {
-            const imageInput = document.getElementById("foodImage");
-            const file = imageInput.files[0];
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            document.body.classList.toggle('dark', darkMode);
+        }
+
+        function uploadFoodImage() {
+            const fileInput = document.getElementById('foodImage');
+            const file = fileInput.files[0];
             if (file) {
                 const formData = new FormData();
-                formData.append("image", file);
+                formData.append('file', file);
 
-                try {
-                    const response = await fetch(`https://api.yourcalorieestimator.com/estimate?api_key=${apiKey}`, {
-                        method: "POST",
-                        body: formData,
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        var estimatedCalories = data.calories; // Assuming the API returns calories in this format
-                        document.getElementById("calorieEstimate").textContent = `${estimatedCalories} kcal`;
-                        foodEntries.push({ food: file.name, calories: estimatedCalories });
-                        updateFoodList();
-                    } else {
-                        document.getElementById("calorieEstimate").textContent = "Error estimating calories. Please try again.";
+                // API call for calorie estimation
+                fetch('https://api.yourcalorieapi.com/estimate', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Authorization': 'Bearer 26a3d04f97dd41f68bab3d124a3dc4b9'
                     }
-                } catch (error) {
-                    document.getElementById("calorieEstimate").textContent = "Error uploading image. Please try again.";
-                    console.error("Error:", error);
-                }
-            } else {
-                alert("Please upload an image.");
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('calorieEstimate').innerText = `${data.calories} calories`;
+                    addToFoodList(data.food);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             }
         }
 
-        function updateFoodList() {
-            const foodList = document.getElementById("foodList");
-            foodList.innerHTML = '';
-            foodEntries.forEach(entry => {
-                const li = document.createElement('li');
-                li.textContent = `${entry.food}: ${entry.calories} kcal`;
-                foodList.appendChild(li);
-            });
+        function addToFoodList(foodItem) {
+            const foodList = document.getElementById('foodList');
+            const li = document.createElement('li');
+            li.textContent = foodItem;
+            foodList.appendChild(li);
         }
 
         function setCalorieGoal() {
-            const goal = document.getElementById("calorieGoal").value;
-            calorieGoal = goal;
-            alert(`Calorie goal set to ${goal} kcal.`);
+            const goal = document.getElementById('calorieGoal').value;
+            alert(`Calorie goal set to ${goal} kcal`);
+            // Save goal logic here
         }
 
         function calculateBMI() {
-            const weight = parseFloat(document.getElementById("weight").value);
-            const height = parseFloat(document.getElementById("height").value);
-            if (weight > 0 && height > 0) {
-                const bmi = (weight / (height * height)).toFixed(2);
-                document.getElementById("bmiResult").textContent = `Your BMI is ${bmi}`;
-            } else {
-                alert("Please enter valid weight and height.");
-            }
+            const weight = document.getElementById('weight').value;
+            const height = document.getElementById('height').value;
+            const bmi = (weight / (height * height)).toFixed(2);
+            document.getElementById('bmiResult').innerText = `Your BMI is ${bmi}`;
         }
 
         function calculateBMR() {
-            const age = parseFloat(document.getElementById("age").value);
-            const weight = parseFloat(document.getElementById("weightBMR").value);
-            const height = parseFloat(document.getElementById("heightBMR").value);
-            if (age > 0 && weight > 0 && height > 0) {
-                const bmr = 10 * weight + 6.25 * height - 5 * age + 5;
-                document.getElementById("bmrResult").textContent = `Your BMR is ${bmr.toFixed(2)} kcal/day`;
-            } else {
-                alert("Please enter valid age, weight, and height.");
-            }
+            const age = document.getElementById('age').value;
+            const weight = document.getElementById('weightBMR').value;
+            const height = document.getElementById('heightBMR').value;
+
+            // Using Mifflin-St Jeor Equation
+            const bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5; // For males
+            document.getElementById('bmrResult').innerText = `Your BMR is ${bmr.toFixed(2)} calories/day`;
         }
 
-        document.getElementById("darkModeToggle").addEventListener("click", function () {
-            document.body.classList.toggle("dark");
-            const mode = document.body.classList.contains("dark") ? "Dark Mode" : "Light Mode";
-            this.textContent = mode;
-        });
+        function submitFeedback() {
+            const feedbackText = document.getElementById('feedbackText').value;
+            // Here you would typically send the feedback to your server
+            alert('Feedback submitted. Thank you!');
+        }
     </script>
 </body>
 
